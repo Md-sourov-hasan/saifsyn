@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saifsyn/core/services/storage_service.dart';
 import 'package:saifsyn/core/localization/localization_service.dart';
-import 'package:saifsyn/features/analysis/data/model/company_analysis_models.dart';
-import 'package:saifsyn/features/analysis/data/service/company_analysis_service.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_company_analysis_models.dart';
+import 'package:saifsyn/features/ai_analysis/data/service/ai_company_analysis_service.dart';
 
 enum RiskType { all, low, medium }
 

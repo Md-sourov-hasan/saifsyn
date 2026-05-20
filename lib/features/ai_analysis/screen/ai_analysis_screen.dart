@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:saifsyn/features/analysis/controller/analysis_controller.dart';
-import 'package:saifsyn/features/analysis/data/model/company_analysis_models.dart';
+import 'package:saifsyn/features/ai_analysis/controller/ai_analysis_controller.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_company_analysis_models.dart';
 
 class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({super.key});

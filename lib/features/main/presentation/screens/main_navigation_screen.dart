@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:saifsyn/features/expense/presentation/finencial_manager/screens/ai_financial_dashbaord.dart';
-
-import 'package:saifsyn/features/analysis/screen/analysis_screen.dart';
-import 'package:saifsyn/features/portfolios/presentation/screens/portfolio_screen.dart';
 import 'package:saifsyn/features/watchlist/presentation/whitchlist_dashboard.dart';
+import '../../../ai_analysis/screen/ai_analysis_screen.dart';
 import '../../controllers/main_navigation_controller.dart';
 import '../../../../core/common/widgets/custom_bottom_nav.dart';
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:saifsyn/core/services/network_caller.dart';
 import 'package:saifsyn/core/utils/constants/api_constants.dart';
 import 'package:saifsyn/core/utils/logging/logger.dart';
-import 'package:saifsyn/features/analysis/data/model/company_analysis_models.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_company_analysis_models.dart';
 
 class CompanyAnalysisService {
   final NetworkCaller _networkCaller = NetworkCaller();
