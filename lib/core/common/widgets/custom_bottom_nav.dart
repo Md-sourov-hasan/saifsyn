@@ -125,7 +125,7 @@ class _NavItemData {
 const _items = [
   _NavItemData(ImagePath.homeIcon, 'Home'),
   _NavItemData("assets/images/heart.png", 'Watchlist'),
-  _NavItemData(ImagePath.stocksIcon, 'AI Analysis'),
+  _NavItemData(ImagePath.thinking, 'AI Analysis'),
   _NavItemData(ImagePath.portfolioIcon, 'Expense'),
   _NavItemData(ImagePath.profileIcon, 'Profile'),
 ];
