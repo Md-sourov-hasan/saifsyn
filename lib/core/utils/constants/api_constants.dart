@@ -1,7 +1,7 @@
 class ApiConstants {
   // static const String baseUrl = 'http://103.174.189.183:8081/api/v1';
   static const String baseUrl =
-      'https://overapprehensive-optatively-meri.ngrok-free.dev/api/v1';
+      'https://api.thari.finance/api/v1';
 
   // Authentication
   static const String register = '$baseUrl/register';
