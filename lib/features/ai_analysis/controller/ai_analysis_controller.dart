@@ -130,12 +130,16 @@ class AnalysisController extends GetxController {
     _errorMessage.value = '';
 
     try {
+      debugPrint('🚀 [AiAnalysisController] Starting POST API call for company: $companyName');
+      
       final result = await _service.analyzeCompany(
         userId: _userId,
         planId: _planId,
         companyName: companyName,
         language: _apiLanguage,
       );
+
+      debugPrint('✅ [AiAnalysisController] POST API call successful for: ${result.companyName}');
 
       _selectedResult.value = result;
       _selectedHistoryId.value = '';
@@ -145,6 +149,7 @@ class AnalysisController extends GetxController {
       );
       _scrollToTop();
     } catch (error) {
+      debugPrint('❌ [AiAnalysisController] API call failed: $error');
       _errorMessage.value = _cleanError(error);
       Get.snackbar(
         'Analysis failed',
