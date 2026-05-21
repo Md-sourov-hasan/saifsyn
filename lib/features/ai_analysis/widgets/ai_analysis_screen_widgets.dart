@@ -120,7 +120,7 @@ class AiAnalysisTopHero extends StatelessWidget {
               SizedBox(
                 width: isCompact ? double.infinity : 140.w,
                 height: isMobile ? 50.h : 52.h,
-                child: ElevatedButton(
+                child: Obx(() => ElevatedButton(
                   onPressed: controller.isSearching ? null : controller.analyze,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7B61FF),
@@ -146,7 +146,7 @@ class AiAnalysisTopHero extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                ),
+                )),
               ),
             ],
           ),
@@ -946,7 +946,7 @@ class _ChartCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(
                 left: isMobile ? 6.w : 8.w,
-                right: 0, // 0 padding on the right to stretch chart line to extreme right edge
+                right: isMobile ? 16.w : 20.w,
               ),
               child: SizedBox(
                 height: isMobile ? 240.h : 300.h,
