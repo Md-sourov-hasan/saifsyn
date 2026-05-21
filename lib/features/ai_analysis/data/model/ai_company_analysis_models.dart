@@ -51,10 +51,10 @@ class StockSnapshot {
   final double? marketCap;
   final double? epsTtm;
   final double? peRatio;
-  final List<ChartPoint> chart30d;
-  final List<ChartPoint> chart3m;
-  final List<ChartPoint> chart6m;
-  final List<ChartPoint> chart1y;
+
+  /// All historical chart points — used to derive period-filtered views.
+  final List<ChartPoint> chartHistory;
+
   final DateTime? lastUpdatedUtc;
 
   StockSnapshot({
@@ -74,14 +74,39 @@ class StockSnapshot {
     required this.marketCap,
     required this.epsTtm,
     required this.peRatio,
-    required this.chart30d,
-    required this.chart3m,
-    required this.chart6m,
-    required this.chart1y,
+    required this.chartHistory,
     required this.lastUpdatedUtc,
   });
 
+  // ── Period-filtered getters (client-side, no extra backend calls) ──────────
+
+  List<ChartPoint> get chart30d => _filterDays(30);
+  List<ChartPoint> get chart3m  => _filterDays(90);
+  List<ChartPoint> get chart6m  => _filterDays(180);
+  List<ChartPoint> get chart1y  => _filterDays(365);
+
+  List<ChartPoint> _filterDays(int days) {
+    if (chartHistory.isEmpty) return const [];
+    final cutoff = DateTime.now().toUtc().subtract(Duration(days: days));
+    final filtered = chartHistory
+        .where((p) => p.timestampUtc != null && p.timestampUtc!.isAfter(cutoff))
+        .toList();
+    // If filtering returns nothing (all data is older), return full history
+    return filtered.isEmpty ? chartHistory : filtered;
+  }
+
   factory StockSnapshot.fromJson(Map<String, dynamic> json) {
+    // Accept either chart_history (preferred) or chart_30d as the source.
+    List<ChartPoint> parsePoints(dynamic raw) =>
+        (raw as List<dynamic>? ?? <dynamic>[])
+            .whereType<Map<String, dynamic>>()
+            .map(ChartPoint.fromJson)
+            .toList();
+
+    final history = json['chart_history'] != null
+        ? parsePoints(json['chart_history'])
+        : parsePoints(json['chart_30d']);
+
     return StockSnapshot(
       symbol: json['symbol']?.toString() ?? '',
       exchange: json['exchange']?.toString() ?? '',
@@ -99,22 +124,7 @@ class StockSnapshot {
       marketCap: _toDouble(json['market_cap']),
       epsTtm: _toDouble(json['eps_ttm']),
       peRatio: _toDouble(json['pe_ratio']),
-      chart30d: (json['chart_30d'] as List<dynamic>? ?? <dynamic>[])
-          .whereType<Map<String, dynamic>>()
-          .map(ChartPoint.fromJson)
-          .toList(),
-      chart3m: (json['chart_3m'] as List<dynamic>? ?? <dynamic>[])
-          .whereType<Map<String, dynamic>>()
-          .map(ChartPoint.fromJson)
-          .toList(),
-      chart6m: (json['chart_6m'] as List<dynamic>? ?? <dynamic>[])
-          .whereType<Map<String, dynamic>>()
-          .map(ChartPoint.fromJson)
-          .toList(),
-      chart1y: (json['chart_1y'] as List<dynamic>? ?? <dynamic>[])
-          .whereType<Map<String, dynamic>>()
-          .map(ChartPoint.fromJson)
-          .toList(),
+      chartHistory: history,
       lastUpdatedUtc: DateTime.tryParse(
         json['last_updated_utc']?.toString() ?? '',
       ),
