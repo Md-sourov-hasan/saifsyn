@@ -1334,163 +1334,121 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: AppColors.surfaceLight),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 14.h),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'History',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: controller.fetchHistory,
-                  icon: controller.isHistoryLoading
-                      ? SizedBox(
-                          width: 16.w,
-                          height: 16.w,
-                          child:
-                              const CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.refresh_rounded),
-                ),
-              ],
+    return Obx(() {
+      if (controller.history.isEmpty) {
+        return Center(
+          child: Padding(
+            padding: EdgeInsets.all(24.w),
+            child: Text(
+              'Your recent analysis searches will appear here.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: AppColors.textSecondary,
+              ),
             ),
           ),
-          const Divider(height: 1, color: AppColors.surfaceLight),
-          Expanded(
-            child: Obx(() {
-              if (controller.history.isEmpty) {
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24.w),
-                    child: Text(
-                      'Your recent analysis searches will appear here.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                );
-              }
+        );
+      }
 
-              return ListView.separated(
-                padding: EdgeInsets.all(12.w),
-                itemCount: controller.history.length,
-                separatorBuilder: (_, __) => SizedBox(height: 10.h),
-                itemBuilder: (context, index) {
-                  final item = controller.history[index];
-                  final selected = item.id == controller.selectedHistoryId;
+      return ListView.separated(
+        padding: EdgeInsets.zero,
+        itemCount: controller.history.length,
+        separatorBuilder: (_, __) => SizedBox(height: 10.h),
+        itemBuilder: (context, index) {
+          final item = controller.history[index];
+          final selected = item.id == controller.selectedHistoryId;
 
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(18.r),
-                    onTap: () async {
-                      await controller.openHistoryItem(item);
-                      onItemTap?.call();
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      padding: EdgeInsets.all(14.w),
-                      decoration: BoxDecoration(
-                        color: selected
-                            ? const Color(0xFFF1EEFF)
-                            : const Color(0xFFFCFCFD),
-                        borderRadius: BorderRadius.circular(18.r),
-                        border: Border.all(
-                          color: selected
-                              ? const Color(0xFFD9D6FE)
-                              : AppColors.surfaceLight,
+          return InkWell(
+            borderRadius: BorderRadius.circular(18.r),
+            onTap: () async {
+              await controller.openHistoryItem(item);
+              onItemTap?.call();
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              padding: EdgeInsets.all(14.w),
+              decoration: BoxDecoration(
+                color: selected
+                    ? const Color(0xFFF1EEFF)
+                    : const Color(0xFFFCFCFD),
+                borderRadius: BorderRadius.circular(18.r),
+                border: Border.all(
+                  color: selected
+                      ? const Color(0xFFD9D6FE)
+                      : AppColors.surfaceLight,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.ticker?.isNotEmpty == true
+                              ? item.ticker!
+                              : item.companyName,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  item.ticker?.isNotEmpty == true
-                                      ? item.ticker!
-                                      : item.companyName,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                              _Badge(
-                                label: item.shariahStatus.toUpperCase(),
-                                color: _statusColor(item.shariahStatus),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            item.companyName,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              color: AppColors.textSecondary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today_outlined,
-                                size: 14.sp,
-                                color: AppColors.textSecondary,
-                              ),
-                              SizedBox(width: 6.w),
-                              Expanded(
-                                child: Text(
-                                  _historyDate(item.searchedAt),
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: AppColors.textSecondary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                item.language.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 11.sp,
-                                  color: AppColors.accent,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      _Badge(
+                        label: item.shariahStatus.toUpperCase(),
+                        color: _statusColor(item.shariahStatus),
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    item.companyName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w600,
                     ),
-                  );
-                },
-              );
-            }),
-          ),
-        ],
-      ),
-    );
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 14.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                      SizedBox(width: 6.w),
+                      Expanded(
+                        child: Text(
+                          _historyDate(item.searchedAt),
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        item.language.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: AppColors.accent,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 }
 
