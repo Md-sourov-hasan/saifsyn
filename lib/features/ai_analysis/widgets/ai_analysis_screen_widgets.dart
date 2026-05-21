@@ -109,10 +109,12 @@ class AiAnalysisTopHero extends StatelessWidget {
             direction: isCompact ? Axis.vertical : Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: isCompact ? 0 : 5,
-                child: _SearchField(controller: controller),
-              ),
+              isCompact
+                  ? _SearchField(controller: controller)
+                  : Expanded(
+                      flex: 5,
+                      child: _SearchField(controller: controller),
+                    ),
               SizedBox(
                   width: isCompact ? 0 : 12.w, height: isCompact ? 12.h : 0),
               _LanguageToggle(controller: controller),
@@ -845,10 +847,10 @@ class _ChartCard extends StatelessWidget {
           twoLabelsOnly: duration == ChartDuration.days30);
       final minY = points.isEmpty
           ? 0.0
-          : points.map((e) => e.close).reduce(math.min) * 0.96;
+          : points.map((e) => e.close).reduce(math.min);
       final maxY = points.isEmpty
           ? 1.0
-          : points.map((e) => e.close).reduce(math.max) * 1.04;
+          : points.map((e) => e.close).reduce(math.max);
 
       return Container(
         padding: EdgeInsets.symmetric(vertical: isMobile ? 16.w : 20.w),
@@ -1001,17 +1003,30 @@ class _ChartCard extends StatelessWidget {
                                 showTitles: true,
                                 reservedSize: isMobile ? 42.w : 52.w,
                                 interval: (maxY - minY) / 4,
-                                getTitlesWidget: (value, meta) => Padding(
-                                  padding: EdgeInsets.only(right: 8.w),
-                                  child: Text(
-                                    _axisMoney(value, snapshot.currency),
-                                    style: TextStyle(
-                                      color: AppColors.textSecondary,
-                                      fontSize: isMobile ? 10.sp : 11.sp,
-                                      fontWeight: FontWeight.w600,
+                                getTitlesWidget: (value, meta) {
+                                  final bool isBoundary = value == meta.min || value == meta.max;
+                                  final double range = meta.max - meta.min;
+                                  
+                                  if (!isBoundary) {
+                                    // Hide interval if it's too close to the min or max boundary
+                                    if ((value - meta.min).abs() < range * 0.15 || 
+                                        (meta.max - value).abs() < range * 0.15) {
+                                      return const SizedBox.shrink();
+                                    }
+                                  }
+
+                                  return Padding(
+                                    padding: EdgeInsets.only(right: 8.w),
+                                    child: Text(
+                                      _axisMoney(value, snapshot.currency),
+                                      style: TextStyle(
+                                        color: AppColors.textSecondary,
+                                        fontSize: isMobile ? 10.sp : 11.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             ),
                             bottomTitles: AxisTitles(
