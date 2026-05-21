@@ -1334,22 +1334,52 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.history.isEmpty) {
-        return Center(
-          child: Padding(
-            padding: EdgeInsets.all(24.w),
-            child: Text(
-              'Your recent analysis searches will appear here.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: AppColors.textSecondary,
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 14.h),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'History',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
               ),
-            ),
+              Obx(() => IconButton(
+                    onPressed: controller.fetchHistory,
+                    icon: controller.isHistoryLoading
+                        ? SizedBox(
+                            width: 16.w,
+                            height: 16.w,
+                            child: const CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.refresh_rounded),
+                  )),
+            ],
           ),
-        );
-      }
+        ),
+        Expanded(
+          child: Obx(() {
+            if (controller.history.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Text(
+                    'Your recent analysis searches will appear here.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+              );
+            }
 
       return ListView.separated(
         padding: EdgeInsets.zero,
@@ -1448,7 +1478,9 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
           );
         },
       );
-    });
+    })),
+      ],
+    );
   }
 }
 
