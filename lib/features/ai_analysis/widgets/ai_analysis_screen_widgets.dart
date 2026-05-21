@@ -825,13 +825,13 @@ class _ChartCard extends StatelessWidget {
   String _dateFormatForDuration(ChartDuration duration) {
     switch (duration) {
       case ChartDuration.days30:
-        return 'MMM d';
+        return 'd MMM';
       case ChartDuration.months3:
-        return 'MMM d';
+        return 'd MMM';
       case ChartDuration.months6:
-        return 'MMM yy';
+        return 'd MMM';
       case ChartDuration.year1:
-        return 'MMM yy';
+        return 'd MMM';
     }
   }
 
@@ -1017,7 +1017,7 @@ class _ChartCard extends StatelessWidget {
                                         ? ''
                                         : DateFormat(
                                                 _dateFormatForDuration(duration))
-                                            .format(date.toLocal()),
+                                            .format(date),
                                     style: TextStyle(
                                       color: const Color(0xFF98A2B3),
                                       fontSize: isMobile ? 9.sp : 10.sp,
@@ -1048,7 +1048,7 @@ class _ChartCard extends StatelessWidget {
                                       text: point.timestampUtc == null
                                           ? ''
                                           : DateFormat('dd MMM yyyy').format(
-                                              point.timestampUtc!.toLocal()),
+                                              point.timestampUtc!),
                                       style: TextStyle(
                                         color: Colors.white70,
                                         fontSize: 10.sp,
