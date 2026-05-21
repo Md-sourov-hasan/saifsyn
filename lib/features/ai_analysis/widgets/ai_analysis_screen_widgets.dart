@@ -59,7 +59,7 @@ class AiAnalysisTopHero extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.insights_rounded,
-                        color: const Color(0xFF4C3FD7),
+                        color: AppColors.primary1,
                         size: 22.sp,
                       ),
                     ),
@@ -125,33 +125,34 @@ class AiAnalysisTopHero extends StatelessWidget {
                 width: isCompact ? double.infinity : 140.w,
                 height: isMobile ? 50.h : 52.h,
                 child: Obx(() => ElevatedButton(
-                  onPressed: controller.isSearching ? null : controller.analyze,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.accent,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                  ),
-                  child: controller.isSearching
-                      ? SizedBox(
-                          width: 20.w,
-                          height: 20.w,
-                          child: const CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.white,
-                            strokeCap: StrokeCap.round,
-                          ),
-                        )
-                      : Text(
-                          'Analysis',
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      onPressed:
+                          controller.isSearching ? null : controller.analyze,
+                      style: ElevatedButton.styleFrom(
+                        side: BorderSide.none,
+                        backgroundColor: AppColors.primary1,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
                         ),
-                )),
+                      ),
+                      child: controller.isSearching
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.h,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Analysis',
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                    )),
               ),
             ],
           ),
@@ -195,7 +196,7 @@ class _MobileTopActions extends StatelessWidget {
                   const Icon(
                     Icons.language_rounded,
                     size: 18,
-                    color: AppColors.accent,
+                    color: AppColors.primary1,
                   ),
                   SizedBox(width: 8.w),
                   Expanded(
@@ -307,8 +308,7 @@ class _SearchField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
-              borderSide:
-                  const BorderSide(color: AppColors.accent, width: 1.4),
+              borderSide: const BorderSide(color: AppColors.accent, width: 1.4),
             ),
           ),
         );
@@ -375,7 +375,7 @@ class _LanguageChip extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: selected ? AppColors.accent.withValues(alpha: 0.1) : Colors.transparent,
+          color: selected ? AppColors.primary1 : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Text(
@@ -383,7 +383,7 @@ class _LanguageChip extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w700,
-            color: selected ? AppColors.accent : AppColors.textSecondary,
+            color: selected ? AppColors.textWhite : AppColors.textSecondary,
           ),
         ),
       ),
@@ -491,7 +491,10 @@ class _ResultHeader extends StatelessWidget {
                       height: 52.w,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [AppColors.accent.withValues(alpha: 0.1), const Color(0xFFE0EAFF)],
+                          colors: [
+                            AppColors.accent.withValues(alpha: 0.1),
+                            const Color(0xFFE0EAFF)
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(16.r),
                       ),
@@ -501,7 +504,7 @@ class _ResultHeader extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.accent,
+                            color: AppColors.primary1,
                           ),
                         ),
                       ),
@@ -554,7 +557,10 @@ class _ResultHeader extends StatelessWidget {
                   height: 56.w,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [AppColors.accent.withValues(alpha: 0.1), const Color(0xFFE0EAFF)],
+                      colors: [
+                        AppColors.accent.withValues(alpha: 0.1),
+                        const Color(0xFFE0EAFF)
+                      ],
                     ),
                     borderRadius: BorderRadius.circular(18.r),
                   ),
@@ -846,12 +852,10 @@ class _ChartCard extends StatelessWidget {
       final points = _pointsForDuration(duration);
       final labels = _labelIndexes(points.length,
           twoLabelsOnly: duration == ChartDuration.days30);
-      final minY = points.isEmpty
-          ? 0.0
-          : points.map((e) => e.close).reduce(math.min);
-      final maxY = points.isEmpty
-          ? 1.0
-          : points.map((e) => e.close).reduce(math.max);
+      final minY =
+          points.isEmpty ? 0.0 : points.map((e) => e.close).reduce(math.min);
+      final maxY =
+          points.isEmpty ? 1.0 : points.map((e) => e.close).reduce(math.max);
 
       return Container(
         padding: EdgeInsets.symmetric(vertical: isMobile ? 16.w : 20.w),
@@ -915,7 +919,7 @@ class _ChartCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppColors.accent
+                                ? AppColors.primary1
                                 : const Color(0xFFF4F4F6),
                             borderRadius: BorderRadius.circular(50.r),
                             boxShadow: isSelected
@@ -1005,13 +1009,16 @@ class _ChartCard extends StatelessWidget {
                                 reservedSize: isMobile ? 42.w : 52.w,
                                 interval: (maxY - minY) / 4,
                                 getTitlesWidget: (value, meta) {
-                                  final bool isBoundary = value == meta.min || value == meta.max;
+                                  final bool isBoundary =
+                                      value == meta.min || value == meta.max;
                                   final double range = meta.max - meta.min;
-                                  
+
                                   if (!isBoundary) {
                                     // Hide interval if it's too close to the min or max boundary
-                                    if ((value - meta.min).abs() < range * 0.15 || 
-                                        (meta.max - value).abs() < range * 0.15) {
+                                    if ((value - meta.min).abs() <
+                                            range * 0.15 ||
+                                        (meta.max - value).abs() <
+                                            range * 0.15) {
                                       return const SizedBox.shrink();
                                     }
                                   }
@@ -1124,10 +1131,8 @@ class _ChartCard extends StatelessWidget {
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: [
-                                    AppColors.accent
-                                        .withValues(alpha: 0.18),
-                                    AppColors.accent
-                                        .withValues(alpha: 0.01),
+                                    AppColors.accent.withValues(alpha: 0.18),
+                                    AppColors.accent.withValues(alpha: 0.01),
                                   ],
                                 ),
                               ),
@@ -1357,137 +1362,137 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                         ? SizedBox(
                             width: 16.w,
                             height: 16.w,
-                            child: const CircularProgressIndicator(strokeWidth: 2),
+                            child:
+                                const CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.refresh_rounded),
                   )),
             ],
           ),
         ),
-        Expanded(
-          child: Obx(() {
-            if (controller.isHistoryLoading) {
-              return ListView.separated(
-                padding: EdgeInsets.zero,
-                itemCount: 4,
-                separatorBuilder: (_, __) => SizedBox(height: 10.h),
-                itemBuilder: (_, __) => const _HistoryShimmerItem(),
-              );
-            }
-            if (controller.history.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.all(24.w),
-                  child: Text(
-                    'Your recent analysis searches will appear here.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: AppColors.textSecondary,
-                    ),
+        Expanded(child: Obx(() {
+          if (controller.isHistoryLoading) {
+            return ListView.separated(
+              padding: EdgeInsets.zero,
+              itemCount: 4,
+              separatorBuilder: (_, __) => SizedBox(height: 10.h),
+              itemBuilder: (_, __) => const _HistoryShimmerItem(),
+            );
+          }
+          if (controller.history.isEmpty) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Text(
+                  'Your recent analysis searches will appear here.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: AppColors.textSecondary,
                   ),
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-      return ListView.separated(
-        padding: EdgeInsets.zero,
-        itemCount: controller.history.length,
-        separatorBuilder: (_, __) => SizedBox(height: 10.h),
-        itemBuilder: (context, index) {
-          final item = controller.history[index];
-          final selected = item.id == controller.selectedHistoryId;
+          return ListView.separated(
+            padding: EdgeInsets.zero,
+            itemCount: controller.history.length,
+            separatorBuilder: (_, __) => SizedBox(height: 10.h),
+            itemBuilder: (context, index) {
+              final item = controller.history[index];
+              final selected = item.id == controller.selectedHistoryId;
 
-          return InkWell(
-            borderRadius: BorderRadius.circular(18.r),
-            onTap: () async {
-              await controller.openHistoryItem(item);
-              onItemTap?.call();
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              padding: EdgeInsets.all(14.w),
-              decoration: BoxDecoration(
-                color: selected
-                    ? const Color(0xFFF1EEFF)
-                    : const Color(0xFFFCFCFD),
+              return InkWell(
                 borderRadius: BorderRadius.circular(18.r),
-                border: Border.all(
-                  color: selected
-                      ? const Color(0xFFD9D6FE)
-                      : AppColors.surfaceLight,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          item.ticker?.isNotEmpty == true
-                              ? item.ticker!
-                              : item.companyName,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ),
-                      _Badge(
-                        label: item.shariahStatus.toUpperCase(),
-                        color: _statusColor(item.shariahStatus),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    item.companyName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w600,
+                onTap: () async {
+                  await controller.openHistoryItem(item);
+                  onItemTap?.call();
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding: EdgeInsets.all(14.w),
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? const Color(0xFFF1EEFF)
+                        : const Color(0xFFFCFCFD),
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: selected
+                          ? const Color(0xFFD9D6FE)
+                          : AppColors.surfaceLight,
                     ),
                   ),
-                  SizedBox(height: 12.h),
-                  Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.calendar_today_outlined,
-                        size: 14.sp,
-                        color: AppColors.textSecondary,
-                      ),
-                      SizedBox(width: 6.w),
-                      Expanded(
-                        child: Text(
-                          _historyDate(item.searchedAt),
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w600,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.ticker?.isNotEmpty == true
+                                  ? item.ticker!
+                                  : item.companyName,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
                           ),
+                          _Badge(
+                            label: item.shariahStatus.toUpperCase(),
+                            color: _statusColor(item.shariahStatus),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        item.companyName,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
-                        item.language.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          color: AppColors.accent,
-                          fontWeight: FontWeight.w800,
-                        ),
+                      SizedBox(height: 12.h),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14.sp,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(width: 6.w),
+                          Expanded(
+                            child: Text(
+                              _historyDate(item.searchedAt),
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            item.language.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
-        },
-      );
-    })),
+        })),
       ],
     );
   }
@@ -1700,19 +1705,16 @@ Set<int> _labelIndexes(int length, {bool twoLabelsOnly = false}) {
 List<Widget> _buildSectionContent(String content, String title, bool isMobile) {
   final cleanTitle = title.trim().toLowerCase();
 
-  final lines = content
-      .split('\n')
-      .map((line) => line.trimRight())
-      .where((line) {
-        final trimmed = line.trim();
-        if (trimmed.isEmpty) return false;
+  final lines =
+      content.split('\n').map((line) => line.trimRight()).where((line) {
+    final trimmed = line.trim();
+    if (trimmed.isEmpty) return false;
 
-        final withoutHash = trimmed.replaceAll('#', '').trim().toLowerCase();
-        if (withoutHash == cleanTitle) return false;
+    final withoutHash = trimmed.replaceAll('#', '').trim().toLowerCase();
+    if (withoutHash == cleanTitle) return false;
 
-        return true;
-      })
-      .toList();
+    return true;
+  }).toList();
 
   return lines.map((line) {
     final trimmed = line.trim();
@@ -1743,7 +1745,7 @@ List<Widget> _buildSectionContent(String content, String title, bool isMobile) {
                 width: 6.w,
                 height: 6.w,
                 decoration: const BoxDecoration(
-                  color: AppColors.accent,
+                  color: AppColors.primary1,
                   shape: BoxShape.circle,
                 ),
               ),
