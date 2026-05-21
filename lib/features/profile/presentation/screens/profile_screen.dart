@@ -48,11 +48,14 @@ class ProfileScreen extends StatelessWidget {
                 final email = (profile?.email ?? '').trim().isNotEmpty
                     ? profile!.email
                     : 'No email available';
+                final isEliteMember = profile?.isEliteMember ??
+                    subscriptionController.isEliteMember;
 
                 return ProfileHeader(
                   username: username,
                   email: email,
-                  isEliteMember: subscriptionController.isEliteMember,
+                  isEliteMember: isEliteMember,
+                  planName: profile?.planName,
                   onUpgradeTap: () {
                     Get.to(() => const SubscriptionScreen());
                   },
@@ -63,7 +66,11 @@ class ProfileScreen extends StatelessWidget {
 
               // Premium Features Card (only show if elite member)
               Obx(() {
-                if (subscriptionController.isEliteMember) {
+                final profile = profileController.profileData;
+                final isEliteMember = profile?.isEliteMember ??
+                    subscriptionController.isEliteMember;
+
+                if (isEliteMember) {
                   return Column(
                     children: [
                       Padding(

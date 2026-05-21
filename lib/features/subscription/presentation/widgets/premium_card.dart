@@ -17,10 +17,14 @@ class PremiumCard extends StatelessWidget {
         ? Get.find<ProfileController>()
         : Get.put(ProfileController());
 
-    return Obx(
-      () {
-        debugPrint("PREMIUM CARD -> Elite Member: ${controller.isEliteMember} | Plan Name: '${profileController.profileData?.planName}'");
-        return Container(
+    return Obx(() {
+      final profile = profileController.profileData;
+      final isEliteMember = profile?.isEliteMember ?? controller.isEliteMember;
+      final planName = profile?.planName?.trim() ?? '';
+
+      debugPrint(
+          "PREMIUM CARD -> Elite Member: $isEliteMember | Plan Name: '${profile?.planName}'");
+      return Container(
         width: double.infinity,
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
@@ -51,9 +55,9 @@ class PremiumCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.isEliteMember
-                        ? (profileController.profileData?.planName?.isNotEmpty == true
-                            ? profileController.profileData!.planName!
+                    isEliteMember
+                        ? (planName.isNotEmpty
+                            ? planName
                             : localizationService.translate('eliteMember'))
                         : localizationService.translate('goElite'),
                     style: TextStyle(
@@ -65,7 +69,7 @@ class PremiumCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    controller.isEliteMember
+                    isEliteMember
                         ? localizationService.translate('allFeaturesUnlocked')
                         : localizationService.translate('unlockAllFeatures'),
                     style: TextStyle(
@@ -82,7 +86,6 @@ class PremiumCard extends StatelessWidget {
           ],
         ),
       );
-      }
-    );
+    });
   }
 }

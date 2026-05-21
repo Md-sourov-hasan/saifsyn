@@ -6,6 +6,7 @@ import 'package:saifsyn/features/subscription/data/model/subscription_plan_model
 import 'package:saifsyn/features/subscription/data/service/subscription_service.dart';
 import 'package:saifsyn/features/subscription/presentation/screens/stripe_checkout_webview.dart';
 import 'package:saifsyn/features/profile/controllers/profile_controller.dart';
+import 'package:saifsyn/features/profile/data/model/profile_response_model.dart';
 
 class SubscriptionController extends GetxController {
   final RxBool _isEliteMember = false.obs;
@@ -160,7 +161,46 @@ class SubscriptionController extends GetxController {
     _expiryDate.value = '';
   }
 
-  Future<void> syncLatestPaymentStatus({bool showError = false}) async {
+  void syncFromProfile(ProfileData? profile) {
+    if (profile == null) return;
+
+    if (!profile.hasActiveSubscription) {
+      _clearSubscriptionState();
+      return;
+    }
+
+    _isEliteMember.value = true;
+    _subscribedPlanId.value = profile.subscriptionPlanId;
+
+    final fetchedPlanName = profile.planName?.trim() ?? '';
+    if (fetchedPlanName.isNotEmpty) {
+      _planName.value = fetchedPlanName;
+    }
+
+    final planId = profile.subscriptionPlanId;
+    if (planId == null) return;
+
+    final planIndex = _plans.indexWhere((plan) => plan.id == planId);
+    if (planIndex < 0) return;
+
+    final plan = _plans[planIndex];
+    _selectedPlanIndex.value = planIndex;
+    _planPrice.value = formatPrice(plan.price);
+  }
+
+  Future<ProfileData?> refreshProfileSubscriptionStatus() async {
+    final profileController = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+    final profile = await profileController.fetchProfile();
+    syncFromProfile(profile);
+    return profile;
+  }
+
+  Future<void> syncLatestPaymentStatus({
+    bool showError = false,
+    bool keepProfileSubscription = false,
+  }) async {
     try {
       final paymentStatus = await _subscriptionService.getPaymentStatus();
       _latestPaymentStatus.value = paymentStatus.status;
@@ -168,6 +208,8 @@ class SubscriptionController extends GetxController {
 
       if (paymentStatus.isPaid && paymentStatus.planId != null) {
         _applySubscriptionState(planId: paymentStatus.planId!);
+      } else if (keepProfileSubscription && _isEliteMember.value) {
+        return;
       } else {
         _clearSubscriptionState();
       }
@@ -191,10 +233,7 @@ class SubscriptionController extends GetxController {
       _applySubscriptionState(planId: planId, renewFromNow: true);
 
       await _saveSubscriptionStatus();
-
-      if (Get.isRegistered<ProfileController>()) {
-        await Get.find<ProfileController>().fetchProfile();
-      }
+      await refreshProfileSubscriptionStatus();
 
       final localizationService = Get.find<LocalizationService>();
       Get.snackbar(
@@ -251,7 +290,7 @@ class SubscriptionController extends GetxController {
 
       if (success == true) {
         await activateSubscription(planId: plan.id);
-        await syncLatestPaymentStatus();
+        await syncLatestPaymentStatus(keepProfileSubscription: true);
       }
     } catch (e) {
       final localizationService = Get.find<LocalizationService>();

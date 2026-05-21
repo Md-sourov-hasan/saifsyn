@@ -40,6 +40,17 @@ class ProfileData {
   final String? updatedAt;
   final String role;
 
+  bool get hasActiveSubscription {
+    final normalizedPlanName = planName?.trim().toLowerCase() ?? '';
+    return subscriptionPlanId != null ||
+        (normalizedPlanName.isNotEmpty &&
+            normalizedPlanName != 'free' &&
+            normalizedPlanName != 'none' &&
+            normalizedPlanName != 'null');
+  }
+
+  bool get isEliteMember => hasActiveSubscription;
+
   ProfileData({
     required this.id,
     required this.name,
