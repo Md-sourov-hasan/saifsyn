@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:saifsyn/features/ai_analysis/controller/ai_analysis_controller.dart';
 import 'package:saifsyn/features/ai_analysis/data/model/ai_company_analysis_models.dart';
 import 'package:saifsyn/core/utils/constants/colors.dart';
@@ -1365,6 +1366,14 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
         ),
         Expanded(
           child: Obx(() {
+            if (controller.isHistoryLoading) {
+              return ListView.separated(
+                padding: EdgeInsets.zero,
+                itemCount: 4,
+                separatorBuilder: (_, __) => SizedBox(height: 10.h),
+                itemBuilder: (_, __) => const _HistoryShimmerItem(),
+              );
+            }
             if (controller.history.isEmpty) {
               return Center(
                 child: Padding(
@@ -1748,6 +1757,92 @@ List<Widget> _buildSectionContent(String content, bool isMobile) {
       ),
     );
   }).toList();
+}
+
+class _HistoryShimmerItem extends StatelessWidget {
+  const _HistoryShimmerItem();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFCFCFD),
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: AppColors.surfaceLight),
+      ),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200]!,
+        highlightColor: Colors.grey[100]!,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 80.w,
+                  height: 16.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+                Container(
+                  width: 50.w,
+                  height: 20.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(999.r),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.h),
+            Container(
+              width: 140.w,
+              height: 14.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Container(
+                  width: 14.w,
+                  height: 14.w,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                SizedBox(width: 6.w),
+                Container(
+                  width: 60.w,
+                  height: 12.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  width: 30.w,
+                  height: 12.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 TextStyle _bodyStyle(bool isMobile) => TextStyle(
