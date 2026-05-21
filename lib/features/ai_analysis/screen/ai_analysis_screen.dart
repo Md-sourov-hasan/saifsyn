@@ -21,18 +21,20 @@ class AiAnalysisScreen extends StatelessWidget {
           final showSidebar = width >= 1100;
           final isMobile = width < 700;
 
+          final topHero = AiAnalysisTopHero(
+            controller: controller,
+            isMobile: isMobile,
+            showHistoryButton: !showSidebar,
+            onHistoryTap: () => _showHistorySheet(context, controller),
+          );
+
           return Column(
             children: [
               Obx(() => ClipRect(
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       heightFactor: controller.floatingHeightFactor.value,
-                      child: AiAnalysisTopHero(
-                        controller: controller,
-                        isMobile: isMobile,
-                        showHistoryButton: !showSidebar,
-                        onHistoryTap: () => _showHistorySheet(context, controller),
-                      ),
+                      child: topHero,
                     ),
                   )),
               Expanded(
