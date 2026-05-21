@@ -38,9 +38,7 @@ class AiAnalysisScreen extends StatelessWidget {
                     ),
                   )),
               Expanded(
-                child: RefreshIndicator(
-                  onRefresh: controller.refreshCurrent,
-                  child: Row(
+                child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
@@ -80,7 +78,6 @@ class AiAnalysisScreen extends StatelessWidget {
                               ),
                           ],
                         ),
-                      ),
               ),
             ],
           );
