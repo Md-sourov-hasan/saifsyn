@@ -1180,7 +1180,7 @@ class _SectionCard extends StatelessWidget {
           SizedBox(height: 14.h),
           Divider(color: AppColors.surfaceLight, height: 1.h),
           SizedBox(height: 18.h),
-          ..._buildSectionContent(section.content, isMobile),
+          ..._buildSectionContent(section.content, section.title, isMobile),
           if (section.tables.isNotEmpty) SizedBox(height: 8.h),
           ...section.tables.map(
             (table) => Padding(
@@ -1697,11 +1697,21 @@ Set<int> _labelIndexes(int length, {bool twoLabelsOnly = false}) {
   return indexes;
 }
 
-List<Widget> _buildSectionContent(String content, bool isMobile) {
+List<Widget> _buildSectionContent(String content, String title, bool isMobile) {
+  final cleanTitle = title.trim().toLowerCase();
+
   final lines = content
       .split('\n')
       .map((line) => line.trimRight())
-      .where((line) => line.trim().isNotEmpty)
+      .where((line) {
+        final trimmed = line.trim();
+        if (trimmed.isEmpty) return false;
+
+        final withoutHash = trimmed.replaceAll('#', '').trim().toLowerCase();
+        if (withoutHash == cleanTitle) return false;
+
+        return true;
+      })
       .toList();
 
   return lines.map((line) {
