@@ -21,12 +21,18 @@ class AiAnalysisScreen extends StatelessWidget {
 
           return Column(
             children: [
-              AiAnalysisTopHero(
-                controller: controller,
-                isMobile: isMobile,
-                showHistoryButton: !showSidebar,
-                onHistoryTap: () => _showHistorySheet(context, controller),
-              ),
+              Obx(() => ClipRect(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      heightFactor: controller.floatingHeightFactor.value,
+                      child: AiAnalysisTopHero(
+                        controller: controller,
+                        isMobile: isMobile,
+                        showHistoryButton: !showSidebar,
+                        onHistoryTap: () => _showHistorySheet(context, controller),
+                      ),
+                    ),
+                  )),
               Expanded(
                 child: controller.isBootstrapping && !controller.hasResult
                     ? const Center(child: CircularProgressIndicator())

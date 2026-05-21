@@ -17,6 +17,10 @@ class AnalysisController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final ScrollController contentScrollController = ScrollController();
 
+  final RxDouble floatingHeightFactor = 1.0.obs;
+  double _lastOffset = 0.0;
+  final double _headerScrollDistance = 150.0;
+
   final RxBool _isBootstrapping = true.obs;
   final RxBool _isSearching = false.obs;
   final RxBool _isHistoryLoading = false.obs;
@@ -48,7 +52,28 @@ class AnalysisController extends GetxController {
   void onInit() {
     super.onInit();
     _language.value = _resolveInitialLanguage();
+    _initScrollListener();
     bootstrap();
+  }
+
+  void _initScrollListener() {
+    contentScrollController.addListener(() {
+      final double currentOffset = contentScrollController.offset;
+      final double delta = currentOffset - _lastOffset;
+
+      if (currentOffset <= 0) {
+        floatingHeightFactor.value = 1.0;
+      } else {
+        double currentFactor = floatingHeightFactor.value;
+        currentFactor -= delta / _headerScrollDistance;
+        currentFactor = currentFactor.clamp(0.0, 1.0);
+        if (floatingHeightFactor.value != currentFactor) {
+          floatingHeightFactor.value = currentFactor;
+        }
+      }
+
+      _lastOffset = currentOffset;
+    });
   }
 
   @override
