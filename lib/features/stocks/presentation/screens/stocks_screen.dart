@@ -22,25 +22,37 @@ class StocksScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F5FA),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(controller, notificationController),
-            _buildSelectedStockSection(controller),
-            _buildSummaryRow(controller),
-            _buildSectionTabs(controller),
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading && !controller.hasAnyData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+        child: RefreshIndicator(
+          onRefresh: controller.refreshDashboard,
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      _buildHeader(controller, notificationController),
+                      _buildSelectedStockSection(controller),
+                      _buildSummaryRow(controller),
+                    ],
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _StickyTabBarDelegate(
+                    height: 56.h,
+                    child: _buildSectionTabs(controller),
+                  ),
+                ),
+              ];
+            },
+            body: Obx(() {
+              if (controller.isLoading && !controller.hasAnyData) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                return RefreshIndicator(
-                  onRefresh: controller.refreshDashboard,
-                  child: _buildSectionBody(controller),
-                );
-              }),
-            ),
-          ],
+              return _buildSectionBody(controller);
+            }),
+          ),
         ),
       ),
     );
@@ -545,5 +557,35 @@ class StocksScreen extends StatelessWidget {
       return '--';
     }
     return DateFormat('dd MMM yyyy').format(date.toLocal());
+  }
+}
+
+class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  _StickyTabBarDelegate({required this.child, required this.height});
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Material(
+      color: const Color(0xFFF2F5FA), // Solid background prevents overlap
+      child: Align(
+        alignment: Alignment.center,
+        child: child,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _StickyTabBarDelegate oldDelegate) {
+    return oldDelegate.child != child || oldDelegate.height != height;
   }
 }
