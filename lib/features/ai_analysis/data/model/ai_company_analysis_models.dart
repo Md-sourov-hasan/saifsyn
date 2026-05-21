@@ -87,12 +87,28 @@ class StockSnapshot {
 
   List<ChartPoint> _filterDays(int days) {
     if (chartHistory.isEmpty) return const [];
+
+    // Try date-based filtering first
     final cutoff = DateTime.now().toUtc().subtract(Duration(days: days));
-    final filtered = chartHistory
-        .where((p) => p.timestampUtc != null && p.timestampUtc!.isAfter(cutoff))
-        .toList();
-    // If filtering returns nothing (all data is older), return full history
-    return filtered.isEmpty ? chartHistory : filtered;
+    final hasTimestamps = chartHistory.any((p) => p.timestampUtc != null);
+
+    if (hasTimestamps) {
+      final filtered = chartHistory
+          .where(
+            (p) => p.timestampUtc != null && p.timestampUtc!.isAfter(cutoff),
+          )
+          .toList();
+      if (filtered.isNotEmpty) return filtered;
+    }
+
+    // Fallback: proportionally slice the last N points.
+    // Assume full chartHistory ≈ 365 days of trading data (~252 trading days).
+    // Map requested calendar days → approximate trading day count.
+    final totalPoints = chartHistory.length;
+    // Ratio: requested days out of 365 calendar days
+    final ratio = (days / 365.0).clamp(0.0, 1.0);
+    final count = (totalPoints * ratio).round().clamp(1, totalPoints);
+    return chartHistory.sublist(totalPoints - count);
   }
 
   factory StockSnapshot.fromJson(Map<String, dynamic> json) {
