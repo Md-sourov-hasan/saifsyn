@@ -1000,7 +1000,7 @@ class _ChartCard extends StatelessWidget {
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
-                              interval: 1,
+                              interval: math.max(1, (points.length / 8).ceil()).toDouble(),
                               reservedSize: isMobile ? 26.h : 30.h,
                               getTitlesWidget: (value, meta) {
                                 final index = value.toInt();
@@ -1611,14 +1611,24 @@ String _tickerText(CompanyAnalysisResult result) {
 }
 
 Set<int> _labelIndexes(int length) {
-  if (length <= 6) {
-    return {for (var i = 0; i < length; i++) i};
+  // Show at most 6 labels; enforce a minimum gap so the last label
+  // cannot crowd the one before it.
+  if (length <= 1) return {0};
+  const maxLabels = 6;
+  final step = math.max(1, (length / maxLabels).ceil());
+
+  final indexes = <int>{};
+  for (var i = 0; i < length; i += step) {
+    indexes.add(i);
   }
-  final step = math.max(1, (length / 6).floor());
-  return {
-    for (var i = 0; i < length; i += step) i,
-    length - 1,
-  };
+
+  // Add the last index only if it is far enough from the previous label
+  final lastLabel = indexes.isEmpty ? 0 : indexes.last;
+  if ((length - 1) - lastLabel >= step ~/ 2) {
+    indexes.add(length - 1);
+  }
+
+  return indexes;
 }
 
 List<Widget> _buildSectionContent(String content, bool isMobile) {
