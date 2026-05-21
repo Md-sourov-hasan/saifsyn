@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:saifsyn/features/ai_analysis/controller/ai_analysis_controller.dart';
 import 'package:saifsyn/features/ai_analysis/widgets/ai_analysis_screen_widgets.dart';
+import 'package:saifsyn/core/utils/constants/colors.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AiAnalysisScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class AiAnalysisScreen extends StatelessWidget {
     final controller = Get.put(AnalysisController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7FB),
+      backgroundColor: AppColors.backgroundLight,
       body: SafeArea(
         child: Obx(() {
           final width = MediaQuery.sizeOf(context).width;
@@ -100,7 +101,7 @@ void _showHistorySheet(
         heightFactor: 0.82,
         child: DecoratedBox(
           decoration: const BoxDecoration(
-            color: Color(0xFFF6F7FB),
+            color: AppColors.backgroundLight,
             borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           child: Padding(
@@ -122,8 +123,8 @@ class AiAnalysisShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: const Color(0xFFE4E7EC),
-      highlightColor: const Color(0xFFF2F4F7),
+      baseColor: AppColors.surfaceLight,
+      highlightColor: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

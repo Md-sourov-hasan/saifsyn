@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:saifsyn/features/ai_analysis/controller/ai_analysis_controller.dart';
 import 'package:saifsyn/features/ai_analysis/data/model/ai_company_analysis_models.dart';
+import 'package:saifsyn/core/utils/constants/colors.dart';
 
 class AiAnalysisTopHero extends StatelessWidget {
   const AiAnalysisTopHero({
@@ -35,7 +36,7 @@ class AiAnalysisTopHero extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF101828).withValues(alpha: 0.06),
+            color: AppColors.textPrimary.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -71,7 +72,7 @@ class AiAnalysisTopHero extends StatelessWidget {
                             style: TextStyle(
                               fontSize: isMobile ? 18.sp : 21.sp,
                               fontWeight: FontWeight.w800,
-                              color: const Color(0xFF111827),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           SizedBox(height: 2.h),
@@ -81,7 +82,7 @@ class AiAnalysisTopHero extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: isMobile ? 11.5.sp : 12.5.sp,
-                              color: const Color(0xFF667085),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -95,8 +96,8 @@ class AiAnalysisTopHero extends StatelessWidget {
                   onPressed: onHistoryTap,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF344054),
-                    side: const BorderSide(color: Color(0xFFE4E7EC)),
+                    foregroundColor: AppColors.textPrimary,
+                    side: const BorderSide(color: AppColors.surfaceLight),
                   ),
                   icon: const Icon(Icons.history_rounded),
                   tooltip: 'History',
@@ -123,7 +124,7 @@ class AiAnalysisTopHero extends StatelessWidget {
                 child: Obx(() => ElevatedButton(
                   onPressed: controller.isSearching ? null : controller.analyze,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B61FF),
+                    backgroundColor: AppColors.accent,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -183,7 +184,7 @@ class _MobileTopActions extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: const Color(0xFFE4E7EC)),
+              border: Border.all(color: AppColors.surfaceLight),
             ),
             child: Obx(
               () => Row(
@@ -191,7 +192,7 @@ class _MobileTopActions extends StatelessWidget {
                   const Icon(
                     Icons.language_rounded,
                     size: 18,
-                    color: Color(0xFF7B61FF),
+                    color: AppColors.accent,
                   ),
                   SizedBox(width: 8.w),
                   Expanded(
@@ -200,7 +201,7 @@ class _MobileTopActions extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF344054),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -209,7 +210,7 @@ class _MobileTopActions extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF98A2B3),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -224,7 +225,7 @@ class _MobileTopActions extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
             decoration: BoxDecoration(
-              color: const Color(0xFF111827),
+              color: AppColors.textPrimary,
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: Row(
@@ -271,7 +272,7 @@ class _SearchField extends StatelessWidget {
           style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF101828),
+            color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
             filled: true,
@@ -279,7 +280,7 @@ class _SearchField extends StatelessWidget {
             hintText: 'Search company name',
             hintStyle: TextStyle(
               fontSize: 14.sp,
-              color: const Color(0xFF98A2B3),
+              color: AppColors.textSecondary,
             ),
             prefixIcon: const Icon(Icons.search_rounded),
             suffixIcon: value.text.trim().isEmpty
@@ -295,16 +296,16 @@ class _SearchField extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
-              borderSide: const BorderSide(color: Color(0xFFE4E7EC)),
+              borderSide: const BorderSide(color: AppColors.surfaceLight),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
-              borderSide: const BorderSide(color: Color(0xFFE4E7EC)),
+              borderSide: const BorderSide(color: AppColors.surfaceLight),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide:
-                  const BorderSide(color: Color(0xFF7B61FF), width: 1.4),
+                  const BorderSide(color: AppColors.accent, width: 1.4),
             ),
           ),
         );
@@ -328,7 +329,7 @@ class _LanguageToggle extends StatelessWidget {
         padding: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: const Color(0xFFE4E7EC)),
+          border: Border.all(color: AppColors.surfaceLight),
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Row(
@@ -371,7 +372,7 @@ class _LanguageChip extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFFEEF2FF) : Colors.transparent,
+          color: selected ? AppColors.accent.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Text(
@@ -379,7 +380,7 @@ class _LanguageChip extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w700,
-            color: selected ? const Color(0xFF4338CA) : const Color(0xFF667085),
+            color: selected ? AppColors.accent : AppColors.textSecondary,
           ),
         ),
       ),
@@ -474,7 +475,7 @@ class _ResultHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.surfaceLight),
       ),
       child: isMobile
           ? Column(
@@ -486,8 +487,8 @@ class _ResultHeader extends StatelessWidget {
                       width: 52.w,
                       height: 52.w,
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFEEF2FF), Color(0xFFE0EAFF)],
+                        gradient: LinearGradient(
+                          colors: [AppColors.accent.withValues(alpha: 0.1), const Color(0xFFE0EAFF)],
                         ),
                         borderRadius: BorderRadius.circular(16.r),
                       ),
@@ -497,7 +498,7 @@ class _ResultHeader extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF4338CA),
+                            color: AppColors.accent,
                           ),
                         ),
                       ),
@@ -509,7 +510,7 @@ class _ResultHeader extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w800,
-                          color: const Color(0xFF111827),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ),
@@ -520,7 +521,7 @@ class _ResultHeader extends StatelessWidget {
                   '${result.ticker.isEmpty ? 'N/A' : result.ticker} • ${result.stockSnapshot?.exchange.isNotEmpty == true ? result.stockSnapshot!.exchange : 'Market unavailable'}',
                   style: TextStyle(
                     fontSize: 12.5.sp,
-                    color: const Color(0xFF667085),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 SizedBox(height: 14.h),
@@ -549,8 +550,8 @@ class _ResultHeader extends StatelessWidget {
                   width: 56.w,
                   height: 56.w,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFEEF2FF), Color(0xFFE0EAFF)],
+                    gradient: LinearGradient(
+                      colors: [AppColors.accent.withValues(alpha: 0.1), const Color(0xFFE0EAFF)],
                     ),
                     borderRadius: BorderRadius.circular(18.r),
                   ),
@@ -560,7 +561,7 @@ class _ResultHeader extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF4338CA),
+                        color: AppColors.accent,
                       ),
                     ),
                   ),
@@ -575,7 +576,7 @@ class _ResultHeader extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w800,
-                          color: const Color(0xFF111827),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 6.h),
@@ -583,7 +584,7 @@ class _ResultHeader extends StatelessWidget {
                         '${result.ticker.isEmpty ? 'N/A' : result.ticker} • ${result.stockSnapshot?.exchange.isNotEmpty == true ? result.stockSnapshot!.exchange : 'Market unavailable'} • $languageLabel',
                         style: TextStyle(
                           fontSize: 13.sp,
-                          color: const Color(0xFF667085),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -628,7 +629,7 @@ class _SnapshotCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFD9D6FE)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7B61FF).withValues(alpha: 0.08),
+            color: AppColors.accent.withValues(alpha: 0.08),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
@@ -757,7 +758,7 @@ class _MetricBlock extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 13.sp,
-              color: const Color(0xFF667085),
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -768,7 +769,7 @@ class _MetricBlock extends StatelessWidget {
               fontSize: compact ? 22.sp : 26.sp,
               height: 1.1,
               fontWeight: FontWeight.w800,
-              color: valueColor ?? const Color(0xFF111827),
+              color: valueColor ?? AppColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -776,7 +777,7 @@ class _MetricBlock extends StatelessWidget {
             subtitle,
             style: TextStyle(
               fontSize: 13.sp,
-              color: const Color(0xFF667085),
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -854,7 +855,7 @@ class _ChartCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24.r),
-          border: Border.all(color: const Color(0xFFEAECF0)),
+          border: Border.all(color: AppColors.surfaceLight),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -880,7 +881,7 @@ class _ChartCard extends StatelessWidget {
                           'Closing price trend — ${_labelForDuration(duration)}',
                           style: TextStyle(
                             fontSize: 13.sp,
-                            color: const Color(0xFF667085),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -911,13 +912,13 @@ class _ChartCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? const Color(0xFF7B61FF)
+                                ? AppColors.accent
                                 : const Color(0xFFF4F4F6),
                             borderRadius: BorderRadius.circular(50.r),
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
-                                      color: const Color(0xFF7B61FF)
+                                      color: AppColors.accent
                                           .withValues(alpha: 0.28),
                                       blurRadius: 10,
                                       offset: const Offset(0, 3),
@@ -932,7 +933,7 @@ class _ChartCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: isSelected
                                   ? Colors.white
-                                  : const Color(0xFF667085),
+                                  : AppColors.textSecondary,
                             ),
                           ),
                         ),
@@ -958,14 +959,14 @@ class _ChartCard extends StatelessWidget {
                             Icon(
                               Icons.bar_chart_rounded,
                               size: 40.sp,
-                              color: const Color(0xFFD0D5DD),
+                              color: AppColors.surfaceLight,
                             ),
                             SizedBox(height: 10.h),
                             Text(
                               'No chart data for this period',
                               style: TextStyle(
                                 fontSize: 13.sp,
-                                color: const Color(0xFF98A2B3),
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -984,7 +985,7 @@ class _ChartCard extends StatelessWidget {
                             drawVerticalLine: false,
                             horizontalInterval: (maxY - minY) / 4,
                             getDrawingHorizontalLine: (_) => const FlLine(
-                              color: Color(0xFFEAECF0),
+                              color: AppColors.surfaceLight,
                               strokeWidth: 1,
                             ),
                           ),
@@ -1005,7 +1006,7 @@ class _ChartCard extends StatelessWidget {
                                   child: Text(
                                     _axisMoney(value, snapshot.currency),
                                     style: TextStyle(
-                                      color: const Color(0xFF98A2B3),
+                                      color: AppColors.textSecondary,
                                       fontSize: isMobile ? 10.sp : 11.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1051,7 +1052,7 @@ class _ChartCard extends StatelessWidget {
                                                           duration))
                                                   .format(date),
                                           style: TextStyle(
-                                            color: const Color(0xFF98A2B3),
+                                            color: AppColors.textSecondary,
                                             fontSize: isMobile ? 9.sp : 10.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -1066,7 +1067,7 @@ class _ChartCard extends StatelessWidget {
                           borderData: FlBorderData(show: false),
                           lineTouchData: LineTouchData(
                             touchTooltipData: LineTouchTooltipData(
-                              getTooltipColor: (_) => const Color(0xFF111827),
+                              getTooltipColor: (_) => AppColors.textPrimary,
                               getTooltipItems: (spots) {
                                 return spots.map((spot) {
                                   final point = points[spot.x.toInt()];
@@ -1099,7 +1100,7 @@ class _ChartCard extends StatelessWidget {
                             LineChartBarData(
                               isCurved: true,
                               barWidth: 3.2,
-                              color: const Color(0xFF7B61FF),
+                              color: AppColors.accent,
                               dotData: const FlDotData(show: false),
                               belowBarData: BarAreaData(
                                 show: true,
@@ -1107,9 +1108,9 @@ class _ChartCard extends StatelessWidget {
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: [
-                                    const Color(0xFF7B61FF)
+                                    AppColors.accent
                                         .withValues(alpha: 0.18),
-                                    const Color(0xFF7B61FF)
+                                    AppColors.accent
                                         .withValues(alpha: 0.01),
                                   ],
                                 ),
@@ -1147,7 +1148,7 @@ class _SectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.surfaceLight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1161,7 +1162,7 @@ class _SectionCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 14.h),
-          Divider(color: const Color(0xFFEAECF0), height: 1.h),
+          Divider(color: AppColors.surfaceLight, height: 1.h),
           SizedBox(height: 18.h),
           ..._buildSectionContent(section.content, isMobile),
           if (section.tables.isNotEmpty) SizedBox(height: 8.h),
@@ -1194,7 +1195,7 @@ class _AnalysisTableWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(18.r),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE4E7EC)),
+          border: Border.all(color: AppColors.surfaceLight),
           borderRadius: BorderRadius.circular(18.r),
         ),
         child: SingleChildScrollView(
@@ -1218,7 +1219,7 @@ class _AnalysisTableWidget extends StatelessWidget {
                       textAlign: isFirst ? TextAlign.left : TextAlign.right,
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -1241,7 +1242,7 @@ class _AnalysisTableWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 13.sp,
-                            color: const Color(0xFF344054),
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -1285,7 +1286,7 @@ class _MobileMetricTile extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 12.sp,
-              color: const Color(0xFF667085),
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -1322,7 +1323,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.surfaceLight),
       ),
       child: Column(
         children: [
@@ -1336,7 +1337,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF111827),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -1354,7 +1355,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1, color: Color(0xFFEAECF0)),
+          const Divider(height: 1, color: AppColors.surfaceLight),
           Expanded(
             child: Obx(() {
               if (controller.history.isEmpty) {
@@ -1366,7 +1367,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: const Color(0xFF667085),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -1398,7 +1399,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                         border: Border.all(
                           color: selected
                               ? const Color(0xFFD9D6FE)
-                              : const Color(0xFFEAECF0),
+                              : AppColors.surfaceLight,
                         ),
                       ),
                       child: Column(
@@ -1414,7 +1415,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 15.sp,
                                     fontWeight: FontWeight.w800,
-                                    color: const Color(0xFF101828),
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                               ),
@@ -1431,7 +1432,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 13.sp,
-                              color: const Color(0xFF667085),
+                              color: AppColors.textSecondary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -1441,7 +1442,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                               Icon(
                                 Icons.calendar_today_outlined,
                                 size: 14.sp,
-                                color: const Color(0xFF98A2B3),
+                                color: AppColors.textSecondary,
                               ),
                               SizedBox(width: 6.w),
                               Expanded(
@@ -1449,7 +1450,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                                   _historyDate(item.searchedAt),
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: const Color(0xFF98A2B3),
+                                    color: AppColors.textSecondary,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -1458,7 +1459,7 @@ class AiAnalysisHistoryPanel extends StatelessWidget {
                                 item.language.toUpperCase(),
                                 style: TextStyle(
                                   fontSize: 11.sp,
-                                  color: const Color(0xFF7B61FF),
+                                  color: AppColors.accent,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -1525,7 +1526,7 @@ class _MetaPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(999.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.surfaceLight),
       ),
       child: Text(
         label,
@@ -1552,7 +1553,7 @@ class _InlineError extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFFEF3F2),
+        color: AppColors.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: const Color(0xFFFDA29B)),
       ),
@@ -1597,7 +1598,7 @@ class _EmptyState extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.surfaceLight),
       ),
       child: Column(
         children: [
@@ -1605,13 +1606,13 @@ class _EmptyState extends StatelessWidget {
             width: 72.w,
             height: 72.w,
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF2FF),
+              color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(24.r),
             ),
             child: Icon(
               Icons.auto_graph_rounded,
               size: 32.sp,
-              color: const Color(0xFF4338CA),
+              color: AppColors.accent,
             ),
           ),
           SizedBox(height: 18.h),
@@ -1621,7 +1622,7 @@ class _EmptyState extends StatelessWidget {
             style: TextStyle(
               fontSize: 22.sp,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF101828),
+              color: AppColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -1631,7 +1632,7 @@ class _EmptyState extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               height: 1.6,
-              color: const Color(0xFF667085),
+              color: AppColors.textSecondary,
             ),
           ),
           if (actionLabel != null && onAction != null) ...[
@@ -1700,7 +1701,7 @@ List<Widget> _buildSectionContent(String content, bool isMobile) {
           style: TextStyle(
             fontSize: isMobile ? 15.5.sp : 17.sp,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF344054),
+            color: AppColors.textPrimary,
           ),
         ),
       );
@@ -1718,7 +1719,7 @@ List<Widget> _buildSectionContent(String content, bool isMobile) {
                 width: 6.w,
                 height: 6.w,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF7B61FF),
+                  color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -1764,7 +1765,7 @@ Color _statusColor(String status) {
     case 'non_compliant':
       return const Color(0xFFDC2626);
     default:
-      return const Color(0xFF667085);
+      return AppColors.textSecondary;
   }
 }
 
