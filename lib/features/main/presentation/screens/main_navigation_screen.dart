@@ -20,7 +20,7 @@ class MainNavigationScreen extends StatelessWidget {
     final List<Widget Function()> screenBuilders = [
       () => const StocksScreen(),
       () => const WhatchlistDashboard(),
-      () => analysisScreen(),
+      () => const AiAnalysisScreen(),
       () => const AiFinancialDashbaord(),
       () => const ProfileScreen(),
     ];
