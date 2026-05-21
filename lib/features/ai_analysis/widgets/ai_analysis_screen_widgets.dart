@@ -132,11 +132,12 @@ class AiAnalysisTopHero extends StatelessWidget {
                   ),
                   child: controller.isSearching
                       ? SizedBox(
-                          width: 18.w,
-                          height: 18.w,
+                          width: 20.w,
+                          height: 20.w,
                           child: const CircularProgressIndicator(
-                            strokeWidth: 2.2,
+                            strokeWidth: 2.5,
                             color: Colors.white,
+                            strokeCap: StrokeCap.round,
                           ),
                         )
                       : Text(
