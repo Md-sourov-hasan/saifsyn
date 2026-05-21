@@ -840,7 +840,7 @@ class _ChartCard extends StatelessWidget {
     return Obx(() {
       final duration = controller.selectedChartDuration.value;
       final points = _pointsForDuration(duration);
-      final labels = _labelIndexes(points.length);
+      final labels = _labelIndexes(points.length, twoLabelsOnly: duration == ChartDuration.days30);
       final minY = points.isEmpty
           ? 0.0
           : points.map((e) => e.close).reduce(math.min) * 0.96;
@@ -1610,10 +1610,16 @@ String _tickerText(CompanyAnalysisResult result) {
       : result.companyName.trim().substring(0, 1).toUpperCase();
 }
 
-Set<int> _labelIndexes(int length) {
+Set<int> _labelIndexes(int length, {bool twoLabelsOnly = false}) {
+  if (length <= 1) return {0};
+
+  // For 30 Days: show only first and last date (like 3 Months view)
+  if (twoLabelsOnly) {
+    return {0, length - 1};
+  }
+
   // Show at most 6 labels; enforce a minimum gap so the last label
   // cannot crowd the one before it.
-  if (length <= 1) return {0};
   const maxLabels = 6;
   final step = math.max(1, (length / maxLabels).ceil());
 
