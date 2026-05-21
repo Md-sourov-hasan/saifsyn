@@ -52,6 +52,9 @@ class StockSnapshot {
   final double? epsTtm;
   final double? peRatio;
   final List<ChartPoint> chart30d;
+  final List<ChartPoint> chart3m;
+  final List<ChartPoint> chart6m;
+  final List<ChartPoint> chart1y;
   final DateTime? lastUpdatedUtc;
 
   StockSnapshot({
@@ -72,6 +75,9 @@ class StockSnapshot {
     required this.epsTtm,
     required this.peRatio,
     required this.chart30d,
+    required this.chart3m,
+    required this.chart6m,
+    required this.chart1y,
     required this.lastUpdatedUtc,
   });
 
@@ -94,6 +100,18 @@ class StockSnapshot {
       epsTtm: _toDouble(json['eps_ttm']),
       peRatio: _toDouble(json['pe_ratio']),
       chart30d: (json['chart_30d'] as List<dynamic>? ?? <dynamic>[])
+          .whereType<Map<String, dynamic>>()
+          .map(ChartPoint.fromJson)
+          .toList(),
+      chart3m: (json['chart_3m'] as List<dynamic>? ?? <dynamic>[])
+          .whereType<Map<String, dynamic>>()
+          .map(ChartPoint.fromJson)
+          .toList(),
+      chart6m: (json['chart_6m'] as List<dynamic>? ?? <dynamic>[])
+          .whereType<Map<String, dynamic>>()
+          .map(ChartPoint.fromJson)
+          .toList(),
+      chart1y: (json['chart_1y'] as List<dynamic>? ?? <dynamic>[])
           .whereType<Map<String, dynamic>>()
           .map(ChartPoint.fromJson)
           .toList(),

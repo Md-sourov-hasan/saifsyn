@@ -9,6 +9,8 @@ enum RiskType { all, low, medium }
 
 enum AnalysisLanguage { english, arabic }
 
+enum ChartDuration { days30, months3, months6, year1 }
+
 class AnalysisController extends GetxController {
   AnalysisController({CompanyAnalysisService? service})
       : _service = service ?? CompanyAnalysisService();
@@ -31,6 +33,7 @@ class AnalysisController extends GetxController {
   final RxString _selectedHistoryId = ''.obs;
   final Rx<AnalysisLanguage> _language = AnalysisLanguage.english.obs;
   final selectedRisk = RiskType.all.obs;
+  final Rx<ChartDuration> selectedChartDuration = ChartDuration.days30.obs;
 
   bool get isBootstrapping => _isBootstrapping.value;
   bool get isSearching => _isSearching.value;
@@ -198,6 +201,10 @@ class AnalysisController extends GetxController {
 
   void changeRisk(RiskType risk) {
     selectedRisk.value = risk;
+  }
+
+  void changeChartDuration(ChartDuration duration) {
+    selectedChartDuration.value = duration;
   }
 
   void clearError() {

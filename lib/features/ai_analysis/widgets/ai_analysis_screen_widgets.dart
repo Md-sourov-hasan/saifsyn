@@ -438,7 +438,11 @@ class AiAnalysisMainContent extends StatelessWidget {
             isMobile: isMobile,
           ),
           SizedBox(height: 16.h),
-          _ChartCard(snapshot: result.stockSnapshot!, isMobile: isMobile),
+          _ChartCard(
+            snapshot: result.stockSnapshot!,
+            isMobile: isMobile,
+            controller: controller,
+          ),
           SizedBox(height: 16.h),
         ],
         ...result.sections.map(
@@ -785,184 +789,310 @@ class _ChartCard extends StatelessWidget {
   const _ChartCard({
     required this.snapshot,
     required this.isMobile,
+    required this.controller,
   });
 
   final StockSnapshot snapshot;
   final bool isMobile;
+  final AnalysisController controller;
+
+  List<ChartPoint> _pointsForDuration(ChartDuration duration) {
+    switch (duration) {
+      case ChartDuration.days30:
+        return snapshot.chart30d;
+      case ChartDuration.months3:
+        return snapshot.chart3m;
+      case ChartDuration.months6:
+        return snapshot.chart6m;
+      case ChartDuration.year1:
+        return snapshot.chart1y;
+    }
+  }
+
+  String _labelForDuration(ChartDuration duration) {
+    switch (duration) {
+      case ChartDuration.days30:
+        return '30 Days';
+      case ChartDuration.months3:
+        return '3 Months';
+      case ChartDuration.months6:
+        return '6 Months';
+      case ChartDuration.year1:
+        return '1 Year';
+    }
+  }
+
+  String _dateFormatForDuration(ChartDuration duration) {
+    switch (duration) {
+      case ChartDuration.days30:
+        return 'MMM d';
+      case ChartDuration.months3:
+        return 'MMM d';
+      case ChartDuration.months6:
+        return 'MMM yy';
+      case ChartDuration.year1:
+        return 'MMM yy';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final points = snapshot.chart30d;
-    final labels = _labelIndexes(points.length);
-    final minY = points.isEmpty
-        ? 0.0
-        : points.map((e) => e.close).reduce(math.min) * 0.96;
-    final maxY = points.isEmpty
-        ? 1.0
-        : points.map((e) => e.close).reduce(math.max) * 1.04;
+    return Obx(() {
+      final duration = controller.selectedChartDuration.value;
+      final points = _pointsForDuration(duration);
+      final labels = _labelIndexes(points.length);
+      final minY = points.isEmpty
+          ? 0.0
+          : points.map((e) => e.close).reduce(math.min) * 0.96;
+      final maxY = points.isEmpty
+          ? 1.0
+          : points.map((e) => e.close).reduce(math.max) * 1.04;
 
-    return Container(
-      padding: EdgeInsets.all(isMobile ? 16.w : 20.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFEAECF0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '30-Day Price Chart',
-            style: TextStyle(
-              fontSize: isMobile ? 18.sp : 22.sp,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF1D2939),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            'Closing price trend based on the latest analysis snapshot.',
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: const Color(0xFF667085),
-            ),
-          ),
-          SizedBox(height: 22.h),
-          SizedBox(
-            height: isMobile ? 240.h : 300.h,
-            child: points.isEmpty
-                ? const Center(child: Text('Chart data unavailable'))
-                : LineChart(
-                    LineChartData(
-                      minY: minY,
-                      maxY: maxY,
-                      gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                        horizontalInterval: (maxY - minY) / 4,
-                        getDrawingHorizontalLine: (_) => const FlLine(
-                          color: Color(0xFFEAECF0),
-                          strokeWidth: 1,
+      return Container(
+        padding: EdgeInsets.all(isMobile ? 16.w : 20.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(color: const Color(0xFFEAECF0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Price Chart',
+                        style: TextStyle(
+                          fontSize: isMobile ? 18.sp : 22.sp,
+                          fontWeight: FontWeight.w800,
+                          color: const Color(0xFF1D2939),
                         ),
                       ),
-                      titlesData: FlTitlesData(
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Closing price trend — ${_labelForDuration(duration)}',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: const Color(0xFF667085),
                         ),
-                        rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 14.h),
+            // Period toggle bar
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: ChartDuration.values.map((d) {
+                  final isSelected = duration == d;
+                  return Padding(
+                    padding: EdgeInsets.only(right: 8.w),
+                    child: GestureDetector(
+                      onTap: () => controller.changeChartDuration(d),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 14.w : 16.w,
+                          vertical: isMobile ? 7.h : 8.h,
                         ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: isMobile ? 42.w : 52.w,
-                            interval: (maxY - minY) / 4,
-                            getTitlesWidget: (value, meta) => Padding(
-                              padding: EdgeInsets.only(right: 8.w),
-                              child: Text(
-                                _axisMoney(value, snapshot.currency),
-                                style: TextStyle(
-                                  color: const Color(0xFF98A2B3),
-                                  fontSize: isMobile ? 10.sp : 11.sp,
-                                  fontWeight: FontWeight.w600,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFF7B61FF)
+                              : const Color(0xFFF4F4F6),
+                          borderRadius: BorderRadius.circular(50.r),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: const Color(0xFF7B61FF)
+                                        .withValues(alpha: 0.28),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: Text(
+                          _labelForDuration(d),
+                          style: TextStyle(
+                            fontSize: isMobile ? 11.sp : 12.sp,
+                            fontWeight: FontWeight.w700,
+                            color: isSelected
+                                ? Colors.white
+                                : const Color(0xFF667085),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            SizedBox(height: 18.h),
+            SizedBox(
+              height: isMobile ? 240.h : 300.h,
+              child: points.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.bar_chart_rounded,
+                            size: 40.sp,
+                            color: const Color(0xFFD0D5DD),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'No chart data for this period',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              color: const Color(0xFF98A2B3),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : LineChart(
+                      LineChartData(
+                        minY: minY,
+                        maxY: maxY,
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          horizontalInterval: (maxY - minY) / 4,
+                          getDrawingHorizontalLine: (_) => const FlLine(
+                            color: Color(0xFFEAECF0),
+                            strokeWidth: 1,
+                          ),
+                        ),
+                        titlesData: FlTitlesData(
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: isMobile ? 42.w : 52.w,
+                              interval: (maxY - minY) / 4,
+                              getTitlesWidget: (value, meta) => Padding(
+                                padding: EdgeInsets.only(right: 8.w),
+                                child: Text(
+                                  _axisMoney(value, snapshot.currency),
+                                  style: TextStyle(
+                                    color: const Color(0xFF98A2B3),
+                                    fontSize: isMobile ? 10.sp : 11.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            interval: 1,
-                            reservedSize: isMobile ? 26.h : 30.h,
-                            getTitlesWidget: (value, meta) {
-                              final index = value.toInt();
-                              if (!labels.contains(index) ||
-                                  index < 0 ||
-                                  index >= points.length) {
-                                return const SizedBox.shrink();
-                              }
-
-                              final date = points[index].timestampUtc;
-                              return Padding(
-                                padding: EdgeInsets.only(top: 8.h),
-                                child: Text(
-                                  date == null
-                                      ? ''
-                                      : DateFormat('MMM d')
-                                          .format(date.toLocal()),
-                                  style: TextStyle(
-                                    color: const Color(0xFF98A2B3),
-                                    fontSize: isMobile ? 9.sp : 10.sp,
-                                    fontWeight: FontWeight.w600,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 1,
+                              reservedSize: isMobile ? 26.h : 30.h,
+                              getTitlesWidget: (value, meta) {
+                                final index = value.toInt();
+                                if (!labels.contains(index) ||
+                                    index < 0 ||
+                                    index >= points.length) {
+                                  return const SizedBox.shrink();
+                                }
+                                final date = points[index].timestampUtc;
+                                return Padding(
+                                  padding: EdgeInsets.only(top: 8.h),
+                                  child: Text(
+                                    date == null
+                                        ? ''
+                                        : DateFormat(
+                                                _dateFormatForDuration(duration))
+                                            .format(date.toLocal()),
+                                    style: TextStyle(
+                                      color: const Color(0xFF98A2B3),
+                                      fontSize: isMobile ? 9.sp : 10.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        lineTouchData: LineTouchData(
+                          touchTooltipData: LineTouchTooltipData(
+                            getTooltipColor: (_) => const Color(0xFF111827),
+                            getTooltipItems: (spots) {
+                              return spots.map((spot) {
+                                final point = points[spot.x.toInt()];
+                                return LineTooltipItem(
+                                  '${_money(point.close, snapshot.currency)}\n',
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 12.sp,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: point.timestampUtc == null
+                                          ? ''
+                                          : DateFormat('dd MMM yyyy').format(
+                                              point.timestampUtc!.toLocal()),
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList();
                             },
                           ),
                         ),
-                      ),
-                      borderData: FlBorderData(show: false),
-                      lineTouchData: LineTouchData(
-                        touchTooltipData: LineTouchTooltipData(
-                          getTooltipColor: (_) => const Color(0xFF111827),
-                          getTooltipItems: (spots) {
-                            return spots.map((spot) {
-                              final point = points[spot.x.toInt()];
-                              return LineTooltipItem(
-                                '${_money(point.close, snapshot.currency)}\n',
-                                TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 12.sp,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: point.timestampUtc == null
-                                        ? ''
-                                        : DateFormat('dd MMM yyyy').format(
-                                            point.timestampUtc!.toLocal()),
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                        lineBarsData: [
+                          LineChartBarData(
+                            isCurved: true,
+                            barWidth: 3.2,
+                            color: const Color(0xFF7B61FF),
+                            dotData: const FlDotData(show: false),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  const Color(0xFF7B61FF)
+                                      .withValues(alpha: 0.18),
+                                  const Color(0xFF7B61FF)
+                                      .withValues(alpha: 0.01),
                                 ],
-                              );
-                            }).toList();
-                          },
-                        ),
-                      ),
-                      lineBarsData: [
-                        LineChartBarData(
-                          isCurved: true,
-                          barWidth: 3.2,
-                          color: const Color(0xFF1D2DB5),
-                          dotData: const FlDotData(show: false),
-                          belowBarData: BarAreaData(
-                            show: true,
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                const Color(0xFF1D2DB5).withValues(alpha: 0.18),
-                                const Color(0xFF1D2DB5).withValues(alpha: 0.01),
-                              ],
+                              ),
                             ),
+                            spots: [
+                              for (var i = 0; i < points.length; i++)
+                                FlSpot(i.toDouble(), points[i].close),
+                            ],
                           ),
-                          spots: [
-                            for (var i = 0; i < points.length; i++)
-                              FlSpot(i.toDouble(), points[i].close),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-          ),
-        ],
-      ),
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
