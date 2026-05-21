@@ -5,6 +5,7 @@ import 'package:saifsyn/core/localization/localization_service.dart';
 import 'package:saifsyn/features/subscription/data/model/subscription_plan_model.dart';
 import 'package:saifsyn/features/subscription/data/service/subscription_service.dart';
 import 'package:saifsyn/features/subscription/presentation/screens/stripe_checkout_webview.dart';
+import 'package:saifsyn/features/profile/controllers/profile_controller.dart';
 
 class SubscriptionController extends GetxController {
   final RxBool _isEliteMember = false.obs;
@@ -190,6 +191,10 @@ class SubscriptionController extends GetxController {
       _applySubscriptionState(planId: planId, renewFromNow: true);
 
       await _saveSubscriptionStatus();
+
+      if (Get.isRegistered<ProfileController>()) {
+        await Get.find<ProfileController>().fetchProfile();
+      }
 
       final localizationService = Get.find<LocalizationService>();
       Get.snackbar(

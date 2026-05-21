@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:saifsyn/features/profile/data/model/profile_response_model.dart';
 import 'package:saifsyn/features/profile/data/service/profile_service.dart';
@@ -22,6 +23,7 @@ class ProfileController extends GetxController {
       _isLoading.value = true;
       final response = await _profileService.getProfile();
       _profileData.value = response.data;
+      debugPrint("PROFILE FETCH SUCCESS -> Plan Name: '${response.data?.planName}'");
     } catch (e) {
       Get.snackbar(
         'Error',

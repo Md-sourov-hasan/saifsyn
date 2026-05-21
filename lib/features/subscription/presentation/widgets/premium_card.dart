@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:saifsyn/core/localization/localization_service.dart';
 import 'package:saifsyn/core/utils/constants/image_path.dart';
 import 'package:saifsyn/features/subscription/controllers/subscription_controller.dart';
+import 'package:saifsyn/features/profile/controllers/profile_controller.dart';
 
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
@@ -12,9 +13,14 @@ class PremiumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<SubscriptionController>();
     final localizationService = Get.find<LocalizationService>();
+    final profileController = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
 
     return Obx(
-      () => Container(
+      () {
+        debugPrint("PREMIUM CARD -> Elite Member: ${controller.isEliteMember} | Plan Name: '${profileController.profileData?.planName}'");
+        return Container(
         width: double.infinity,
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
@@ -46,7 +52,9 @@ class PremiumCard extends StatelessWidget {
                 children: [
                   Text(
                     controller.isEliteMember
-                        ? localizationService.translate('eliteMember')
+                        ? (profileController.profileData?.planName?.isNotEmpty == true
+                            ? profileController.profileData!.planName!
+                            : localizationService.translate('eliteMember'))
                         : localizationService.translate('goElite'),
                     style: TextStyle(
                       color: Colors.white,
@@ -73,7 +81,8 @@ class PremiumCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      );
+      }
     );
   }
 }

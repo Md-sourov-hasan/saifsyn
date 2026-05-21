@@ -34,6 +34,7 @@ class ProfileData {
   final bool status;
   final int termsAccepted;
   final int? subscriptionPlanId;
+  final String? planName;
   final int isFirstTime;
   final String? createdAt;
   final String? updatedAt;
@@ -50,6 +51,7 @@ class ProfileData {
     required this.status,
     required this.termsAccepted,
     this.subscriptionPlanId,
+    this.planName,
     required this.isFirstTime,
     this.createdAt,
     this.updatedAt,
@@ -79,6 +81,7 @@ class ProfileData {
           : (subscriptionPlanIdValue is int
               ? subscriptionPlanIdValue
               : int.tryParse(subscriptionPlanIdValue.toString())),
+      planName: json['plan_name']?.toString(),
       isFirstTime: isFirstTimeValue is int
           ? isFirstTimeValue
           : int.tryParse(isFirstTimeValue.toString()) ?? 0,
