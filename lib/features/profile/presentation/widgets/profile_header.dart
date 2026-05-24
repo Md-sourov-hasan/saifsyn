@@ -9,6 +9,7 @@ class ProfileHeader extends StatelessWidget {
   final String email;
   final VoidCallback? onUpgradeTap;
   final bool isEliteMember;
+  final String? planName;
 
   const ProfileHeader({
     super.key,
@@ -16,11 +17,16 @@ class ProfileHeader extends StatelessWidget {
     required this.email,
     this.onUpgradeTap,
     this.isEliteMember = false,
+    this.planName,
   });
 
   @override
   Widget build(BuildContext context) {
     final localizationService = Get.find<LocalizationService>();
+    final displayPlanName = planName?.trim() ?? '';
+    final memberLabel = displayPlanName.isNotEmpty
+        ? '$displayPlanName Member'
+        : localizationService.translate('eliteMember');
 
     return Container(
       width: double.infinity,
@@ -141,7 +147,7 @@ class ProfileHeader extends StatelessWidget {
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        localizationService.translate('eliteMember'),
+                        memberLabel,
                         style: TextStyle(
                           color: const Color(0xFF00008B),
                           fontSize: 16.sp,
