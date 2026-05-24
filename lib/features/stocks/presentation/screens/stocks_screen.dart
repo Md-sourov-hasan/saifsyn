@@ -22,25 +22,41 @@ class StocksScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F5FA),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(controller, notificationController),
-            _buildSelectedStockSection(controller),
-            _buildSummaryRow(controller),
-            _buildSectionTabs(controller),
-            Expanded(
-              child: Obx(() {
+        child: RefreshIndicator(
+          onRefresh: controller.refreshDashboard,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    _buildHeader(controller, notificationController),
+                    _buildSelectedStockSection(controller),
+                    _buildSummaryRow(controller),
+                  ],
+                ),
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _StickyTabBarDelegate(
+                  height: 56.h,
+                  child: _buildSectionTabs(controller),
+                ),
+              ),
+              Obx(() {
                 if (controller.isLoading && !controller.hasAnyData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(40.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  );
                 }
 
-                return RefreshIndicator(
-                  onRefresh: controller.refreshDashboard,
-                  child: _buildSectionBody(controller),
-                );
+                return _buildSectionBody(controller);
               }),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -453,20 +469,24 @@ class StocksScreen extends StatelessWidget {
       return _emptyState(message: 'No rating records found.');
     }
 
-    return ListView.separated(
-      physics: const AlwaysScrollableScrollPhysics(),
+    return SliverPadding(
       padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 20.h),
-      itemCount: items.length,
-      separatorBuilder: (_, __) => SizedBox(height: 10.h),
-      itemBuilder: (_, index) {
-        final item = items[index];
-        return StockEntityCard(
-          symbol: item.symbol,
-          title: item.name,
-          subtitle: item.exchange,
-          status: item.status,
-        );
-      },
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            if (index.isOdd) return SizedBox(height: 10.h);
+            final itemIndex = index ~/ 2;
+            final item = items[itemIndex];
+            return StockEntityCard(
+              symbol: item.symbol,
+              title: item.name,
+              subtitle: item.exchange,
+              status: item.status,
+            );
+          },
+          childCount: items.length > 0 ? items.length * 2 - 1 : 0,
+        ),
+      ),
     );
   }
 
@@ -478,20 +498,24 @@ class StocksScreen extends StatelessWidget {
       return _emptyState(message: 'No compliant stock records found.');
     }
 
-    return ListView.separated(
-      physics: const AlwaysScrollableScrollPhysics(),
+    return SliverPadding(
       padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 20.h),
-      itemCount: items.length,
-      separatorBuilder: (_, __) => SizedBox(height: 10.h),
-      itemBuilder: (_, index) {
-        final item = items[index];
-        return StockEntityCard(
-          symbol: item.symbol,
-          title: item.name,
-          subtitle: '${item.exchange} • Report ${_formatDate(item.reportDate)}',
-          status: 'COMPLIANT',
-        );
-      },
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            if (index.isOdd) return SizedBox(height: 10.h);
+            final itemIndex = index ~/ 2;
+            final item = items[itemIndex];
+            return StockEntityCard(
+              symbol: item.symbol,
+              title: item.name,
+              subtitle: '${item.exchange} • Report ${_formatDate(item.reportDate)}',
+              status: 'COMPLIANT',
+            );
+          },
+          childCount: items.length > 0 ? items.length * 2 - 1 : 0,
+        ),
+      ),
     );
   }
 
@@ -503,40 +527,47 @@ class StocksScreen extends StatelessWidget {
       return _emptyState(message: 'No ETF report records found.');
     }
 
-    return ListView.separated(
-      physics: const AlwaysScrollableScrollPhysics(),
+    return SliverPadding(
       padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 20.h),
-      itemCount: items.length,
-      separatorBuilder: (_, __) => SizedBox(height: 10.h),
-      itemBuilder: (_, index) {
-        final item = items[index];
-        return StockEntityCard(
-          symbol: item.symbol,
-          title: item.name,
-          subtitle:
-              'Report ${_formatDate(item.reportDate)} • Holdings ${_formatDate(item.holdingsAsOfDate)}',
-          status: item.status,
-        );
-      },
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            if (index.isOdd) return SizedBox(height: 10.h);
+            final itemIndex = index ~/ 2;
+            final item = items[itemIndex];
+            return StockEntityCard(
+              symbol: item.symbol,
+              title: item.name,
+              subtitle:
+                  'Report ${_formatDate(item.reportDate)} • Holdings ${_formatDate(item.holdingsAsOfDate)}',
+              status: item.status,
+            );
+          },
+          childCount: items.length > 0 ? items.length * 2 - 1 : 0,
+        ),
+      ),
     );
   }
 
   Widget _emptyState({required String message}) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        SizedBox(height: 90.h),
-        Center(
-          child: Text(
-            message,
-            style: TextStyle(
-              color: const Color(0xFF677489),
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
+    return SliverToBoxAdapter(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 90.h),
+          Center(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: const Color(0xFF677489),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 90.h),
+        ],
+      ),
     );
   }
 
@@ -545,5 +576,35 @@ class StocksScreen extends StatelessWidget {
       return '--';
     }
     return DateFormat('dd MMM yyyy').format(date.toLocal());
+  }
+}
+
+class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  _StickyTabBarDelegate({required this.child, required this.height});
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Material(
+      color: const Color(0xFFF2F5FA), // Solid background prevents overlap
+      child: Align(
+        alignment: Alignment.center,
+        child: child,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _StickyTabBarDelegate oldDelegate) {
+    return oldDelegate.child != child || oldDelegate.height != height;
   }
 }

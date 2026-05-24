@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saifsyn/features/analysis_details/screen/analysis_details_screen.dart';
 import 'package:saifsyn/features/main/controllers/main_navigation_controller.dart';
-import 'package:saifsyn/features/analysis/widgets/search_field_widgets.dart';
-import 'package:saifsyn/features/analysis/widgets/stock_card_widgets.dart';
-import '../controller/analysis_controller.dart';
+import 'package:saifsyn/features/myanalysis/widgets/search_field_widgets.dart';
+import 'package:saifsyn/features/myanalysis/widgets/stock_card_widgets.dart';
+import '../controller/my_analysis_controller.dart';
 
-class AnalysisScreen extends StatelessWidget {
-  const AnalysisScreen({super.key});
+class MyAnalysisScreen extends StatelessWidget {
+  const MyAnalysisScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
