@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:saifsyn/features/analysis/data/model/analysis_response_model.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_analysis_response_model.dart';
 
 class AnalysisDetailsController extends GetxController {
   final Rxn<AnalysisItemModel> _analysis = Rxn<AnalysisItemModel>();

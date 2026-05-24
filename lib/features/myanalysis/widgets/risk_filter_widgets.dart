@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../controller/analysis_controller.dart';
+import '../controller/my_analysis_controller.dart';
 import 'package:get/get.dart';
 
 class RiskFilterWidget extends StatelessWidget {
