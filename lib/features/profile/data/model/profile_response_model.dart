@@ -34,10 +34,22 @@ class ProfileData {
   final bool status;
   final int termsAccepted;
   final int? subscriptionPlanId;
+  final String? planName;
   final int isFirstTime;
   final String? createdAt;
   final String? updatedAt;
   final String role;
+
+  bool get hasActiveSubscription {
+    final normalizedPlanName = planName?.trim().toLowerCase() ?? '';
+    return subscriptionPlanId != null ||
+        (normalizedPlanName.isNotEmpty &&
+            normalizedPlanName != 'free' &&
+            normalizedPlanName != 'none' &&
+            normalizedPlanName != 'null');
+  }
+
+  bool get isEliteMember => hasActiveSubscription;
 
   ProfileData({
     required this.id,
@@ -50,6 +62,7 @@ class ProfileData {
     required this.status,
     required this.termsAccepted,
     this.subscriptionPlanId,
+    this.planName,
     required this.isFirstTime,
     this.createdAt,
     this.updatedAt,
@@ -79,6 +92,7 @@ class ProfileData {
           : (subscriptionPlanIdValue is int
               ? subscriptionPlanIdValue
               : int.tryParse(subscriptionPlanIdValue.toString())),
+      planName: json['plan_name']?.toString(),
       isFirstTime: isFirstTimeValue is int
           ? isFirstTimeValue
           : int.tryParse(isFirstTimeValue.toString()) ?? 0,
