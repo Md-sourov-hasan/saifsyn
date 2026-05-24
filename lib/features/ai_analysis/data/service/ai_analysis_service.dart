@@ -4,7 +4,7 @@ import 'package:saifsyn/core/services/network_caller.dart';
 import 'package:saifsyn/core/services/storage_service.dart';
 import 'package:saifsyn/core/utils/constants/api_constants.dart';
 import 'package:saifsyn/core/utils/logging/logger.dart';
-import 'package:saifsyn/features/analysis/data/model/analysis_response_model.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_analysis_response_model.dart';
 
 class AnalysisService {
   final NetworkCaller _networkCaller = NetworkCaller();

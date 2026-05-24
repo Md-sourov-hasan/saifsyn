@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import 'package:saifsyn/core/services/network_caller.dart';
 import 'package:saifsyn/core/services/storage_service.dart';
@@ -40,6 +41,10 @@ class ProfileService {
     AppLoggerHelper.debug(
       'RESPONSE BODY => ${_toPrettyJson(response.responseData)}',
     );
+
+    debugPrint("=== GET PROFILE RAW API RESPONSE ===");
+    debugPrint(_toPrettyJson(response.responseData));
+    debugPrint("====================================");
 
     if (response.isSuccess && response.responseData is Map<String, dynamic>) {
       final model = ProfileResponseModel.fromJson(
