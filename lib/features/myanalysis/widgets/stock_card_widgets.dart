@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saifsyn/core/utils/constants/image_path.dart';
-import 'package:saifsyn/features/analysis/data/model/analysis_response_model.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_analysis_response_model.dart';
 
 class StockCardWidget extends StatelessWidget {
   final AnalysisItemModel stock;

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:saifsyn/core/localization/localization_service.dart';
 import 'package:saifsyn/core/utils/constants/image_path.dart';
 import 'package:saifsyn/features/subscription/controllers/subscription_controller.dart';
+import 'package:saifsyn/features/profile/controllers/profile_controller.dart';
 
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
@@ -12,9 +13,18 @@ class PremiumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<SubscriptionController>();
     final localizationService = Get.find<LocalizationService>();
+    final profileController = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
 
-    return Obx(
-      () => Container(
+    return Obx(() {
+      final profile = profileController.profileData;
+      final isEliteMember = profile?.isEliteMember ?? controller.isEliteMember;
+      final planName = profile?.planName?.trim() ?? '';
+
+      debugPrint(
+          "PREMIUM CARD -> Elite Member: $isEliteMember | Plan Name: '${profile?.planName}'");
+      return Container(
         width: double.infinity,
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
@@ -45,8 +55,10 @@ class PremiumCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.isEliteMember
-                        ? localizationService.translate('eliteMember')
+                    isEliteMember
+                        ? (planName.isNotEmpty
+                            ? planName
+                            : localizationService.translate('eliteMember'))
                         : localizationService.translate('goElite'),
                     style: TextStyle(
                       color: Colors.white,
@@ -57,7 +69,7 @@ class PremiumCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    controller.isEliteMember
+                    isEliteMember
                         ? localizationService.translate('allFeaturesUnlocked')
                         : localizationService.translate('unlockAllFeatures'),
                     style: TextStyle(
@@ -73,7 +85,7 @@ class PremiumCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }
