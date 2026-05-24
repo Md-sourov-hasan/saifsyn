@@ -76,12 +76,14 @@ class AuthService {
 
   Future<RegisterResponseModel> register({
     required String email,
+    required String name,
     required String password,
     required String passwordConfirmation,
     String role = 'user',
     bool termsAccepted = true,
   }) async {
     final body = {
+      'name':name,
       'email': email,
       'password': password,
       'password_confirmation': passwordConfirmation,
