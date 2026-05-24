@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:saifsyn/features/expense/controllers/financial_controller.dart';
 
 class FinancialManagerShowAll extends GetView<FinancialController> {
@@ -195,7 +194,7 @@ class FinancialManagerShowAll extends GetView<FinancialController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
-              LucideIcons.info,
+              Icons.info_outline,
               size: 18.sp,
               color: const Color(0xFF6B7280),
             ),

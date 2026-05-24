@@ -29,6 +29,7 @@ class ImagePath {
   static const String portfolioIcon = 'assets/icons/portfolio.png';
   static const String newsIcon = 'assets/icons/news_navbar.png';
   static const String profileIcon = 'assets/icons/profile_navbar.png';
+  static const String thinking = 'assets/icons/thinking.png';
 
   //Forecast chart
   static const String priceForecastChart = 'assets/images/price_forecast.png';

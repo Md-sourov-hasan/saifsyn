@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:saifsyn/core/localization/localization_service.dart';
 import 'package:saifsyn/core/services/storage_service.dart';
+import 'package:saifsyn/features/myanalysis/screen/my_analysis_screen.dart';
 import 'package:saifsyn/routes/app_routes.dart';
 import 'package:saifsyn/features/authentication/controllers/login_controller.dart';
 import 'package:saifsyn/features/profile/controllers/profile_controller.dart';
@@ -47,11 +48,14 @@ class ProfileScreen extends StatelessWidget {
                 final email = (profile?.email ?? '').trim().isNotEmpty
                     ? profile!.email
                     : 'No email available';
+                final isEliteMember = profile?.isEliteMember ??
+                    subscriptionController.isEliteMember;
 
                 return ProfileHeader(
                   username: username,
                   email: email,
-                  isEliteMember: subscriptionController.isEliteMember,
+                  isEliteMember: isEliteMember,
+                  planName: profile?.planName,
                   onUpgradeTap: () {
                     Get.to(() => const SubscriptionScreen());
                   },
@@ -62,7 +66,11 @@ class ProfileScreen extends StatelessWidget {
 
               // Premium Features Card (only show if elite member)
               Obx(() {
-                if (subscriptionController.isEliteMember) {
+                final profile = profileController.profileData;
+                final isEliteMember = profile?.isEliteMember ??
+                    subscriptionController.isEliteMember;
+
+                if (isEliteMember) {
                   return Column(
                     children: [
                       Padding(
@@ -115,6 +123,13 @@ class ProfileScreen extends StatelessWidget {
                       title: localizationService.translate('changePassword'),
                       onTap: () {
                         Get.to(() => const ChangePasswordScreen());
+                      },
+                    ),
+                    ProfileMenuItem(
+                      icon: Icons.trending_up,
+                      title: localizationService.translate('My Analysis'),
+                      onTap: () {
+                        Get.to(() => const MyAnalysisScreen());
                       },
                     ),
                     ProfileMenuItem(

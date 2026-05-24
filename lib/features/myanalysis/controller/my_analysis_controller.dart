@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:saifsyn/features/analysis/data/model/analysis_response_model.dart';
-import 'package:saifsyn/features/analysis/data/service/analysis_service.dart';
+import 'package:saifsyn/features/ai_analysis/data/model/ai_analysis_response_model.dart';
+import 'package:saifsyn/features/ai_analysis/data/service/ai_analysis_service.dart';
 
 enum RiskType { all, low, medium }
 

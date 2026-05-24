@@ -1,7 +1,7 @@
 class ApiConstants {
   // static const String baseUrl = 'http://103.174.189.183:8081/api/v1';
-  static const String baseUrl =
-      'https://overapprehensive-optatively-meri.ngrok-free.dev/api/v1';
+  static const String baseUrl = 'https://api.thari.finance/api/v1';
+  static const String aiBaseUrl = 'https://ai.thari.finance/api/v1';
 
   // Authentication
   static const String register = '$baseUrl/register';
@@ -71,6 +71,10 @@ class ApiConstants {
 
   // our analysis
   static const String analyses = '$baseUrl/analyses';
+  static const String companyAnalysis = '$aiBaseUrl/analysis/company';
+  static String analysisHistory(String userId) =>
+      '$aiBaseUrl/analysis/history/$userId';
+  static String analysisResult(String id) => '$aiBaseUrl/analysis/result/$id';
 
   // Wishlist
   static const String wishlist = '$baseUrl/wishlist';
