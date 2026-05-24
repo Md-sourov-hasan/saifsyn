@@ -453,8 +453,8 @@ class _AiFinancialDashbaordState extends State<AiFinancialDashbaord> {
                         ),
                         child: isLoading
                             ? SizedBox(
-                                width: 16.w,
-                                height: 16.w,
+                                width: 16.h,
+                                height: 16.h,
                                 child: const CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: Colors.white,

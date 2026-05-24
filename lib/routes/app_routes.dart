@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:saifsyn/features/myanalysis/screen/my_analysis_screen.dart';
 import 'package:saifsyn/features/onboarding/presentation/screens/splash_screen.dart';
 import 'package:saifsyn/features/onboarding/presentation/screens/language_selection_screen.dart';
 import 'package:saifsyn/features/onboarding/presentation/screens/onboarding_pages.dart';
@@ -35,6 +36,7 @@ class AppRoute {
   static String emailSettingsScreen = "/email-settings";
   static String contactUsScreen = "/contact-us";
   static String aboutUsScreen = "/about-us";
+  static String myanalysisscreen = "/myanalysisscreen";
 
   static String getSplashScreen() => splashScreen;
   static String getLanguageSelectionScreen() => languageSelectionScreen;
@@ -53,6 +55,7 @@ class AppRoute {
   static String getEmailSettingsScreen() => emailSettingsScreen;
   static String getContactUsScreen() => contactUsScreen;
   static String getAboutUsScreen() => aboutUsScreen;
+  static String getMyanalysisScreen() => myanalysisscreen;
 
   static List<GetPage> routes = [
     GetPage(
@@ -122,6 +125,10 @@ class AppRoute {
     GetPage(
       name: aboutUsScreen,
       page: () => const AboutUsScreen(),
+    ),
+    GetPage(
+      name: myanalysisscreen,
+      page: () => const MyAnalysisScreen(),
     ),
   ];
 }

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saifsyn/core/core.dart';
 import 'package:saifsyn/core/localization/localization_service.dart';
 import 'package:saifsyn/features/authentication/data/model/terms_response_model.dart';
 import 'package:saifsyn/features/authentication/data/service/auth_service.dart';
@@ -130,6 +133,7 @@ class SignUpController extends GetxController {
     if (!formKey.currentState!.validate()) return;
 
     final email = emailController.text.trim();
+    final name = nameController.text.trim();
     final password = passwordController.text.trim();
     final confirmPassword = confirmPasswordController.text.trim();
     final role = selectedRole;
@@ -139,12 +143,15 @@ class SignUpController extends GetxController {
       _isLoading.value = true;
 
       final response = await _authService.register(
+        name: name,
         email: email,
         password: password,
         passwordConfirmation: confirmPassword,
         role: role,
         termsAccepted: terms,
       );
+
+      
 
       Get.snackbar(
         'Success',
